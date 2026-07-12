@@ -154,21 +154,29 @@ p { margin: 0 0 1em; color: var(--text-700); }
   display: inline-flex; align-items: center; justify-content: center;
   font-size: .95rem; font-weight: 800;
 }
-.brand small { font-weight: 500; color: var(--text-500); font-size: .68rem; letter-spacing: .04em; }
+.brand small { font-weight: 500; color: var(--text-500); font-size: .68rem; letter-spacing: .04em; white-space: nowrap; }
 
 .nav-links {
   display: flex;
-  gap: 4px;
+  flex-wrap: nowrap;
+  gap: 2px;
   list-style: none;
   margin: 0; padding: 0;
 }
+.nav-links li { flex-shrink: 0; }
 .nav-links a {
-  padding: 9px 14px;
+  display: inline-block;
+  padding: 9px 12px;
   border-radius: 999px;
-  font-size: .93rem;
+  font-size: .88rem;
   font-weight: 600;
   color: var(--text-700);
+  white-space: nowrap;
   transition: background .15s, color .15s;
+}
+
+@media (max-width: 1240px) {
+  .brand small { display: none; }
 }
 .nav-links a:hover { background: var(--surface-alt); color: var(--navy-900); }
 .nav-links a.active { background: var(--navy-900); color: #fff; }
@@ -553,6 +561,14 @@ td strong { color: var(--text-900); }
 .tag-physique { background: var(--accent-light); color: var(--accent-dark); }
 
 /* ---------- Responsive ---------- */
+@media (max-width: 960px) {
+  .brand small { display: inline; }
+  .nav-links { position: fixed; inset: 66px 16px auto 16px; background: var(--surface); border: 1px solid var(--border); border-radius: 14px; flex-direction: column; padding: 10px; box-shadow: var(--shadow-md); display: none; }
+  .nav-links.open { display: flex; }
+  .nav-links a { padding: 12px 16px; white-space: normal; }
+  .nav-toggle { display: flex; }
+}
+
 @media (max-width: 880px) {
   .grid-4 { grid-template-columns: repeat(2, 1fr); }
   .grid-3 { grid-template-columns: repeat(2, 1fr); }
@@ -560,10 +576,6 @@ td strong { color: var(--text-900); }
 }
 
 @media (max-width: 720px) {
-  .nav-links { position: fixed; inset: 66px 16px auto 16px; background: var(--surface); border: 1px solid var(--border); border-radius: 14px; flex-direction: column; padding: 10px; box-shadow: var(--shadow-md); display: none; }
-  .nav-links.open { display: flex; }
-  .nav-links a { padding: 12px 16px; }
-  .nav-toggle { display: flex; }
   .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
   .form-row { grid-template-columns: 1fr; }
   .result-grid { grid-template-columns: 1fr; }
