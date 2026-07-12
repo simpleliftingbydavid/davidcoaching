@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Theo dõi Routine — David Coaching</title>
+<meta name="description" content="Theo dõi thói quen tập luyện, dinh dưỡng và nghỉ ngơi mỗi ngày. Xem chuỗi ngày liên tục, thống kê 7 ngày và nhịp đều đặn theo tháng.">
+<link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#1F4959;
+    --navy-deep:#0E2A35;
+    --teal:#157A6E;
+    --teal-soft:#DCEEEA;
+    --ember:#C15B26;
+    --ember-soft:#F5DFCE;
+    --paper:#F5F6F3;
+    --card:#FFFFFF;
+    --ink:#17242A;
+    --ink-soft:#5C6B70;
+    --ink-faint:#94A0A3;
+    --line:#E2E6E2;
+    --radius:14px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:'Be Vietnam Pro',sans-serif;
+    background:var(--paper);
+    color:var(--ink);
+    -webkit-font-smoothing:antialiased;
+    padding:28px 16px 60px;
+  }
+  .wrap{max-width:720px;margin:0 auto;}
+
+  .back-link{
+    display:inline-flex;align-items:center;gap:5px;font-size:12.5px;color:var(--ink-faint);
+    text-decoration:none;margin-bottom:16px;font-weight:600;
+  }
+  .back-link:hover{color:var(--navy);}
+
+  /* ---------- Header ---------- */
+  header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:22px;}
+  .brand{display:flex;flex-direction:column;gap:2px;}
+  .brand .mark{
+    font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:12px;
+    letter-spacing:0.14em;color:var(--navy);text-transform:uppercase;
+  }
+  .brand .date{font-size:14px;color:var(--ink-soft);}
+  .streak-pill{
+    display:flex;align-items:center;gap:7px;background:var(--navy-deep);color:#fff;
+    padding:8px 14px;border-radius:999px;font-family:'Space Grotesk',sans-serif;
+  }
+  .streak-pill .num{font-weight:700;font-size:16px;}
+  .streak-pill .lbl{font-size:11px;color:#B8C6CB;letter-spacing:0.03em;}
+  .streak-flame{width:14px;height:14px;flex-shrink:0;}
+
+  /* ---------- Tabs ---------- */
+  .tabs{display:flex;gap:4px;background:#EAEBE6;padding:4px;border-radius:11px;margin-bottom:22px;}
+  .tab{
+    flex:1;text-align:center;padding:9px 0;border-radius:8px;font-size:14px;font-weight:600;
+    color:var(--ink-soft);cursor:pointer;user-select:none;transition:background .15s,color .15s;
+  }
+  .tab.active{background:var(--card);color:var(--ink);box-shadow:0 1px 2px rgba(14,42,53,0.08);}
+
+  /* ---------- Pillars hero ---------- */
+  .pillars-hero{
+    background:var(--navy-deep);border-radius:var(--radius);padding:26px 22px 18px;
+    display:flex;align-items:flex-end;gap:22px;margin-bottom:22px;position:relative;overflow:hidden;
+  }
+  .pillar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:10px;}
+  .pillar-track{
+    width:100%;max-width:46px;height:120px;background:rgba(255,255,255,0.08);
+    border-radius:6px;display:flex;align-items:flex-end;overflow:hidden;position:relative;
+  }
+  .pillar-fill{width:100%;border-radius:6px 6px 0 0;transition:height .5s cubic-bezier(.4,0,.2,1);}
+  .pillar-pct{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:15px;color:#fff;}
+  .pillar-name{font-size:11.5px;color:#B8C6CB;text-align:center;letter-spacing:0.02em;}
+  .hero-overall{
+    position:absolute;top:20px;right:22px;text-align:right;
+  }
+  .hero-overall .big{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:26px;color:#fff;line-height:1;}
+  .hero-overall .small{font-size:10.5px;color:#8FA6AD;letter-spacing:0.04em;text-transform:uppercase;}
+
+  /* ---------- Pillar cards (checklist) ---------- */
+  .pillar-card{
+    background:var(--card);border-radius:var(--radius);border:1px solid var(--line);
+    margin-bottom:14px;overflow:hidden;
+  }
+  .pillar-card .head{
+    display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid var(--line);
+  }
+  .swatch{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
+  .pillar-card .head h3{font-size:14.5px;margin:0;font-weight:600;flex:1;}
+  .pillar-card .head .count{font-size:12px;color:var(--ink-faint);font-family:'Space Grotesk',sans-serif;}
+  .habit-list{padding:6px 8px;}
+  .habit-row{
+    display:flex;align-items:center;gap:11px;padding:10px 8px;border-radius:9px;cursor:pointer;
+  }
+  .habit-row:hover{background:var(--paper);}
+  .checkbox{
+    width:19px;height:19px;border-radius:6px;border:1.6px solid var(--line);flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;transition:background .12s,border-color .12s;
+  }
+  .checkbox.checked{border-color:transparent;}
+  .checkbox svg{width:11px;height:11px;opacity:0;transition:opacity .1s;}
+  .checkbox.checked svg{opacity:1;}
+  .habit-label{font-size:14px;flex:1;}
+  .habit-label.checked{color:var(--ink-faint);text-decoration:line-through;text-decoration-color:var(--line);}
+  .habit-del{
+    width:20px;height:20px;border:none;background:none;color:var(--ink-faint);cursor:pointer;
+    opacity:0;transition:opacity .12s;font-size:16px;line-height:1;flex-shrink:0;
+  }
+  .habit-row:hover .habit-del{opacity:1;}
+  .add-habit-row{display:flex;gap:8px;padding:8px 8px 10px;}
+  .add-habit-row input{
+    flex:1;border:1px dashed var(--line);border-radius:9px;padding:9px 11px;font-size:13.5px;
+    font-family:inherit;background:transparent;color:var(--ink);
+  }
+  .add-habit-row input:focus{outline:none;border-color:var(--ink-faint);}
+  .add-habit-row button{
+    border:none;background:var(--paper);color:var(--ink-soft);border-radius:9px;
+    padding:0 14px;font-size:13px;font-weight:600;cursor:pointer;
+  }
+
+  /* numeric row inside a pillar */
+  .numeric-row{
+    display:flex;align-items:center;gap:11px;padding:10px 16px 14px;border-top:1px solid var(--line);
+  }
+  .numeric-row label{font-size:13px;color:var(--ink-soft);flex:1;}
+  .numeric-row input{
+    width:78px;text-align:right;border:1px solid var(--line);border-radius:8px;padding:7px 9px;
+    font-family:'Space Grotesk',sans-serif;font-size:14px;color:var(--ink);
+  }
+  .numeric-row input:focus{outline:none;border-color:var(--ink-faint);}
+  .numeric-row .unit{font-size:12.5px;color:var(--ink-faint);width:26px;}
+
+  /* note */
+  .note-card{
+    background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+    padding:14px 16px;margin-bottom:14px;
+  }
+  .note-card label{font-size:12.5px;color:var(--ink-soft);display:block;margin-bottom:6px;}
+  .note-card textarea{
+    width:100%;border:none;resize:none;font-family:inherit;font-size:14px;color:var(--ink);
+    background:transparent;min-height:44px;
+  }
+  .note-card textarea:focus{outline:none;}
+
+  /* ---------- Stats tab ---------- */
+  .stats-section{
+    background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+    padding:18px 18px 20px;margin-bottom:16px;
+  }
+  .stats-section h4{
+    font-size:12.5px;letter-spacing:0.05em;text-transform:uppercase;color:var(--ink-soft);
+    margin:0 0 14px;font-weight:600;
+  }
+  .bar-chart{display:flex;align-items:flex-end;gap:8px;height:96px;}
+  .bar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;height:100%;}
+  .bar-track{width:100%;flex:1;display:flex;align-items:flex-end;}
+  .bar-fill{width:100%;border-radius:4px 4px 0 0;background:var(--teal);min-height:3px;}
+  .bar-day{font-size:10.5px;color:var(--ink-faint);}
+
+  .heatmap{display:grid;grid-auto-flow:column;grid-template-rows:repeat(7,1fr);gap:3px;overflow-x:auto;padding-bottom:4px;}
+  .hm-cell{width:11px;height:11px;border-radius:3px;background:var(--line);}
+  .heatmap-legend{display:flex;align-items:center;gap:6px;margin-top:10px;font-size:11px;color:var(--ink-faint);}
+  .heatmap-legend .hm-cell{width:9px;height:9px;}
+
+  .sparkline-row{display:flex;gap:14px;}
+  .spark-box{flex:1;}
+  .spark-box .label{font-size:11.5px;color:var(--ink-soft);margin-bottom:6px;}
+  .spark-box .val{font-family:'Space Grotesk',sans-serif;font-size:19px;font-weight:700;margin-bottom:4px;}
+  svg.spark{width:100%;height:38px;display:block;}
+
+  .empty-note{font-size:13px;color:var(--ink-faint);text-align:center;padding:14px 0;}
+
+  /* footer */
+  footer{display:flex;justify-content:center;margin-top:10px;}
+  .footer-actions{display:flex;align-items:center;gap:16px;flex-wrap:wrap;justify-content:center;}
+  .reset-btn{
+    background:none;border:none;color:var(--ink-faint);font-size:12px;cursor:pointer;
+    text-decoration:underline;text-underline-offset:2px;font-family:inherit;padding:0;
+  }
+
+  .loading{text-align:center;color:var(--ink-faint);font-size:13.5px;padding:60px 0;}
+
+  /* ---------- Share card ---------- */
+  .share-card{
+    background:var(--navy-deep);border-radius:var(--radius);padding:18px 20px;margin-bottom:16px;
+    display:flex;flex-direction:column;gap:10px;
+  }
+  .share-card h4{margin:0;font-size:14px;color:#fff;font-weight:600;}
+  .share-card p{margin:0;font-size:12.5px;color:#B8C6CB;line-height:1.5;}
+  .share-btn{
+    align-self:flex-start;background:var(--ember);color:#fff;border:none;border-radius:9px;
+    padding:10px 16px;font-size:13.5px;font-weight:600;cursor:pointer;font-family:inherit;
+  }
+  .share-btn:hover{background:#a84e1f;}
+
+  /* ---------- Toast ---------- */
+  .toast{
+    position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(6px);
+    background:var(--navy-deep);color:#fff;padding:10px 18px;border-radius:999px;font-size:13px;
+    box-shadow:0 8px 20px rgba(14,42,53,.25);opacity:0;pointer-events:none;
+    transition:opacity .25s,transform .25s;z-index:50;max-width:88vw;text-align:center;
+  }
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+  @media (max-width:420px){
+    .pillars-hero{gap:12px;padding:22px 14px 16px;}
+    .hero-overall{position:static;text-align:left;order:-1;width:100%;margin-bottom:8px;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a href="../cong-cu.html" class="back-link">&larr; David Coaching</a>
+  <div id="app">
+    <div class="loading" id="loading">Đang tải dữ liệu…</div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const PAPER = {training:'#1F4959', nutrition:'#157A6E', rest:'#C15B26'};
+  const PILLAR_META = {
+    training: {name:'Tập luyện', color:PAPER.training},
+    nutrition: {name:'Dinh dưỡng', color:PAPER.nutrition},
+    rest: {name:'Nghỉ ngơi', color:PAPER.rest}
+  };
+  const STORAGE_KEY = 'david-coaching-routine-data';
+  const WEEKDAYS_VI = ['CN','T2','T3','T4','T5','T6','T7'];
+
+  const DEFAULT_STATE = {
+    habits: {
+      training: [
+        {id:'t1', label:'Buổi tập chính'},
+        {id:'t2', label:'Vận động nhẹ / đi bộ'},
+        {id:'t3', label:'Giãn cơ / mobility'}
+      ],
+      nutrition: [
+        {id:'n1', label:'Uống đủ nước'},
+        {id:'n2', label:'Đủ đạm mỗi bữa'},
+        {id:'n3', label:'Không ăn vặt ngoài kế hoạch'}
+      ],
+      rest: [
+        {id:'r1', label:'Ngủ đủ giờ'},
+        {id:'r2', label:'Không dùng điện thoại trước khi ngủ'},
+        {id:'r3', label:'Có thời gian thư giãn'}
+      ]
+    },
+    days: {}
+  };
+
+  let state = null;
+  let activeTab = 'today';
+
+  function todayKey(offset){
+    const d = new Date();
+    if(offset) d.setDate(d.getDate()+offset);
+    const y = d.getFullYear();
+    const m = String(d.getMonth()+1).padStart(2,'0');
+    const day = String(d.getDate()).padStart(2,'0');
+    return `${y}-${m}-${day}`;
+  }
+  function fmtDateVi(key){
+    const d = new Date(key+'T00:00:00');
+    const wd = ['Chủ Nhật','Thứ Hai','Thứ Ba','Thứ Tư','Thứ Năm','Thứ Sáu','Thứ Bảy'][d.getDay()];
+    return wd + ', ' + String(d.getDate()).padStart(2,'0') + '/' + String(d.getMonth()+1).padStart(2,'0') + '/' + d.getFullYear();
+  }
+  function dayData(key){
+    if(!state.days[key]) state.days[key] = {checks:{}, sleepHours:null, weightKg:null, note:''};
+    return state.days[key];
+  }
+  function allHabitIds(){
+    return Object.values(state.habits).flat().map(h=>h.id);
+  }
+  function pillarCompletion(pillar, key){
+    const habits = state.habits[pillar];
+    if(habits.length===0) return 0;
+    const d = dayData(key);
+    const done = habits.filter(h=>d.checks[h.id]).length;
+    return done/habits.length;
+  }
+  function overallCompletion(key){
+    const ids = allHabitIds();
+    if(ids.length===0) return 0;
+    const d = dayData(key);
+    const done = ids.filter(id=>d.checks[id]).length;
+    return done/ids.length;
+  }
+  function currentStreak(){
+    let streak = 0;
+    let i = 0;
+    while(true){
+      const key = todayKey(-i);
+      const has = state.days[key];
+      const pct = has ? overallCompletion(key) : 0;
+      if(pct >= 0.7){ streak++; i++; }
+      else break;
+      if(i>3650) break;
+    }
+    return streak;
+  }
+
+  async function saveState(){
+    try{
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }catch(e){
+      console.error('Storage save failed', e);
+    }
+  }
+  async function loadState(){
+    try{
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if(raw){
+        state = JSON.parse(raw);
+        if(!state.habits) state.habits = DEFAULT_STATE.habits;
+        if(!state.days) state.days = {};
+      } else {
+        state = JSON.parse(JSON.stringify(DEFAULT_STATE));
+      }
+    }catch(e){
+      state = JSON.parse(JSON.stringify(DEFAULT_STATE));
+    }
+  }
+
+  function checkIcon(){
+    return '<svg viewBox="0 0 12 12" fill="none"><path d="M2 6.2L4.6 8.8L10 3" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  }
+
+  let toastTimer = null;
+  function showToast(msg){
+    let el = document.getElementById('app-toast');
+    if(!el){
+      el = document.createElement('div');
+      el.id = 'app-toast';
+      el.className = 'toast';
+      document.body.appendChild(el);
+    }
+    el.textContent = msg;
+    el.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(()=> el.classList.remove('show'), 2600);
+  }
+
+  function exportData(){
+    try{
+      const blob = new Blob([JSON.stringify(state, null, 2)], {type:'application/json'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `routine-david-coaching-${todayKey(0)}.json`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+      showToast('Đã tải file dữ liệu về máy.');
+    }catch(e){
+      console.error('Export failed', e);
+      showToast('Xuất dữ liệu thất bại.');
+    }
+  }
+
+  async function handleImportFile(file){
+    try{
+      const text = await file.text();
+      const parsed = JSON.parse(text);
+      if(!parsed || typeof parsed!=='object' || !parsed.habits || !parsed.days){
+        showToast('File không đúng định dạng dữ liệu Routine.');
+        return;
+      }
+      if(!confirm('Nhập dữ liệu sẽ THAY THẾ toàn bộ dữ liệu hiện tại trên máy này. Tiếp tục?')) return;
+      state = parsed;
+      if(!state.habits) state.habits = DEFAULT_STATE.habits;
+      if(!state.days) state.days = {};
+      await saveState();
+      renderApp();
+      showToast('Đã nhập dữ liệu thành công.');
+    }catch(e){
+      console.error('Import failed', e);
+      showToast('Không đọc được file. Hãy chọn đúng file JSON đã xuất từ app này.');
+    }
+  }
+
+  function buildWeekSummaryText(){
+    const days7 = [];
+    for(let i=6;i>=0;i--) days7.push(todayKey(-i));
+    const withData = days7.filter(k=>state.days[k]);
+    const avgOverall = withData.length ? Math.round(withData.reduce((s,k)=>s+overallCompletion(k),0)/withData.length*100) : 0;
+    const avgPillar = {};
+    ['training','nutrition','rest'].forEach(p=>{
+      avgPillar[p] = withData.length ? Math.round(withData.reduce((s,k)=>s+pillarCompletion(p,k),0)/withData.length*100) : 0;
+    });
+    const sleepVals = days7.map(k=>state.days[k]?.sleepHours).filter(v=>v!=null);
+    const weightVals = days7.map(k=>state.days[k]?.weightKg).filter(v=>v!=null);
+    const avgSleep = sleepVals.length ? (sleepVals.reduce((a,b)=>a+b,0)/sleepVals.length).toFixed(1) : null;
+    const lastWeight = weightVals.length ? weightVals[weightVals.length-1] : null;
+    const fmtShort = k=>{ const d=new Date(k+'T00:00:00'); return String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0'); };
+
+    const lines = [];
+    lines.push(`📊 Routine tuần này (${fmtShort(days7[0])} – ${fmtShort(days7[6])})`);
+    lines.push(`Hoàn thành trung bình: ${avgOverall}%`);
+    lines.push(`🏋️ Tập luyện: ${avgPillar.training}%  🥗 Dinh dưỡng: ${avgPillar.nutrition}%  😴 Nghỉ ngơi: ${avgPillar.rest}%`);
+    lines.push(`🔥 Streak hiện tại: ${currentStreak()} ngày`);
+    if(avgSleep!==null) lines.push(`😴 Ngủ trung bình: ${avgSleep}h/đêm`);
+    if(lastWeight!==null) lines.push(`⚖️ Cân nặng gần nhất: ${lastWeight}kg`);
+    lines.push('');
+    lines.push('— Gửi từ Theo dõi Routine, David Coaching');
+    return lines.join('\n');
+  }
+
+  async function shareWeekSummary(){
+    const text = buildWeekSummaryText();
+    if(navigator.share){
+      try{
+        await navigator.share({title:'Routine tuần này — David Coaching', text});
+        return;
+      }catch(e){
+        if(e && e.name==='AbortError') return;
+      }
+    }
+    try{
+      await navigator.clipboard.writeText(text);
+      showToast('Đã sao chép! Dán vào Zalo/Messenger để gửi cho David.');
+    }catch(e){
+      console.error('Copy failed', e);
+      showToast('Không thể sao chép tự động — hãy chọn và copy thủ công.');
+    }
+  }
+
+  function renderApp(){
+    const app = document.getElementById('app');
+    app.innerHTML = `
+      <header>
+        <div class="brand">
+          <div class="mark">David Coaching</div>
+          <div class="date">${fmtDateVi(todayKey(0))}</div>
+        </div>
+        <div class="streak-pill">
+          <svg class="streak-flame" viewBox="0 0 24 24" fill="none"><path d="M12 2C12 6 8 8 8 12a4 4 0 0 0 8 0c0-1-.5-2-1-2 1 3-1 5-3 5a3.5 3.5 0 0 1-3.5-3.5C8.5 7 12 6 12 2Z" fill="#C15B26"/></svg>
+          <div><span class="num">${currentStreak()}</span> <span class="lbl">NGÀY LIỀN</span></div>
+        </div>
+      </header>
+      <div class="tabs">
+        <div class="tab ${activeTab==='today'?'active':''}" data-tab="today">Hôm nay</div>
+        <div class="tab ${activeTab==='stats'?'active':''}" data-tab="stats">Thống kê</div>
+      </div>
+      <div id="tab-content"></div>
+      <footer>
+        <div class="footer-actions">
+          <button class="reset-btn" id="export-btn">Xuất dữ liệu</button>
+          <button class="reset-btn" id="import-btn">Nhập dữ liệu</button>
+          <input type="file" id="import-file" accept="application/json" style="display:none">
+          <button class="reset-btn" id="reset-btn">Xoá toàn bộ dữ liệu</button>
+        </div>
+      </footer>
+    `;
+    document.querySelectorAll('.tab').forEach(t=>{
+      t.addEventListener('click', ()=>{ activeTab = t.dataset.tab; renderApp(); });
+    });
+    document.getElementById('reset-btn').addEventListener('click', async ()=>{
+      if(confirm('Xoá toàn bộ dữ liệu routine? Hành động này không thể hoàn tác.')){
+        state = JSON.parse(JSON.stringify(DEFAULT_STATE));
+        await saveState();
+        renderApp();
+      }
+    });
+    document.getElementById('export-btn').addEventListener('click', exportData);
+    document.getElementById('import-btn').addEventListener('click', ()=>{
+      document.getElementById('import-file').click();
+    });
+    document.getElementById('import-file').addEventListener('change', async (e)=>{
+      const file = e.target.files[0];
+      if(!file) return;
+      await handleImportFile(file);
+      e.target.value = '';
+    });
+    if(activeTab==='today') renderToday();
+    else renderStats();
+  }
+
+  function renderToday(){
+    const key = todayKey(0);
+    const d = dayData(key);
+    const container = document.getElementById('tab-content');
+
+    let heroHtml = '<div class="pillars-hero"><div class="hero-overall">' +
+      '<div class="big">'+Math.round(overallCompletion(key)*100)+'%</div>' +
+      '<div class="small">Hoàn thành hôm nay</div></div>';
+    ['training','nutrition','rest'].forEach(p=>{
+      const pct = pillarCompletion(p,key);
+      heroHtml += `<div class="pillar-col">
+        <div class="pillar-pct">${Math.round(pct*100)}%</div>
+        <div class="pillar-track"><div class="pillar-fill" style="height:${Math.max(pct*100,2)}%;background:${PILLAR_META[p].color}"></div></div>
+        <div class="pillar-name">${PILLAR_META[p].name}</div>
+      </div>`;
+    });
+    heroHtml += '</div>';
+
+    let cardsHtml = '';
+    ['training','nutrition','rest'].forEach(p=>{
+      const habits = state.habits[p];
+      const doneCount = habits.filter(h=>d.checks[h.id]).length;
+      cardsHtml += `<div class="pillar-card" data-pillar="${p}">
+        <div class="head">
+          <span class="swatch" style="background:${PILLAR_META[p].color}"></span>
+          <h3>${PILLAR_META[p].name}</h3>
+          <span class="count">${doneCount}/${habits.length}</span>
+        </div>
+        <div class="habit-list">`;
+      habits.forEach(h=>{
+        const checked = !!d.checks[h.id];
+        cardsHtml += `<div class="habit-row" data-habit="${h.id}">
+          <div class="checkbox ${checked?'checked':''}" style="${checked?('background:'+PILLAR_META[p].color):''}">${checkIcon()}</div>
+          <div class="habit-label ${checked?'checked':''}">${h.label}</div>
+          <button class="habit-del" data-del="${h.id}" data-pillar="${p}">×</button>
+        </div>`;
+      });
+      cardsHtml += `</div>
+        <div class="add-habit-row">
+          <input type="text" placeholder="Thêm thói quen…" data-addinput="${p}">
+          <button data-addbtn="${p}">Thêm</button>
+        </div>`;
+      if(p==='nutrition'){
+        cardsHtml += `<div class="numeric-row">
+          <label>Cân nặng</label>
+          <input type="number" step="0.1" data-numeric="weightKg" value="${d.weightKg??''}">
+          <span class="unit">kg</span>
+        </div>`;
+      }
+      if(p==='rest'){
+        cardsHtml += `<div class="numeric-row">
+          <label>Số giờ ngủ</label>
+          <input type="number" step="0.5" data-numeric="sleepHours" value="${d.sleepHours??''}">
+          <span class="unit">giờ</span>
+        </div>`;
+      }
+      cardsHtml += `</div>`;
+    });
+
+    const noteHtml = `<div class="note-card">
+      <label>Ghi chú hôm nay</label>
+      <textarea placeholder="Cảm nhận, năng lượng, điều muốn nhớ…" data-note>${d.note||''}</textarea>
+    </div>`;
+
+    container.innerHTML = heroHtml + cardsHtml + noteHtml;
+
+    container.querySelectorAll('.habit-row').forEach(row=>{
+      row.addEventListener('click', async (e)=>{
+        if(e.target.closest('.habit-del')) return;
+        const id = row.dataset.habit;
+        d.checks[id] = !d.checks[id];
+        await saveState();
+        renderToday();
+        refreshHero();
+      });
+    });
+    container.querySelectorAll('[data-del]').forEach(btn=>{
+      btn.addEventListener('click', async (e)=>{
+        e.stopPropagation();
+        const id = btn.dataset.del, p = btn.dataset.pillar;
+        state.habits[p] = state.habits[p].filter(h=>h.id!==id);
+        delete d.checks[id];
+        await saveState();
+        renderToday();
+      });
+    });
+    container.querySelectorAll('[data-addbtn]').forEach(btn=>{
+      btn.addEventListener('click', async ()=>{
+        const p = btn.dataset.addbtn;
+        const input = container.querySelector(`[data-addinput="${p}"]`);
+        const val = input.value.trim();
+        if(!val) return;
+        state.habits[p].push({id:'h'+Date.now(), label:val});
+        await saveState();
+        renderToday();
+      });
+    });
+    container.querySelectorAll('[data-addinput]').forEach(inp=>{
+      inp.addEventListener('keydown', (e)=>{
+        if(e.key==='Enter'){
+          const p = inp.dataset.addinput;
+          container.querySelector(`[data-addbtn="${p}"]`).click();
+        }
+      });
+    });
+    container.querySelectorAll('[data-numeric]').forEach(inp=>{
+      inp.addEventListener('change', async ()=>{
+        const field = inp.dataset.numeric;
+        d[field] = inp.value===''? null : parseFloat(inp.value);
+        await saveState();
+      });
+    });
+    const noteEl = container.querySelector('[data-note]');
+    noteEl.addEventListener('change', async ()=>{
+      d.note = noteEl.value;
+      await saveState();
+    });
+
+    function refreshHero(){
+      const hero = document.querySelector('.pillars-hero');
+      if(!hero) return;
+      hero.querySelector('.hero-overall .big').textContent = Math.round(overallCompletion(key)*100)+'%';
+      document.querySelectorAll('.pillar-col').forEach((col,idx)=>{
+        const p = ['training','nutrition','rest'][idx];
+        const pct = pillarCompletion(p,key);
+        col.querySelector('.pillar-pct').textContent = Math.round(pct*100)+'%';
+        col.querySelector('.pillar-fill').style.height = Math.max(pct*100,2)+'%';
+      });
+      document.querySelector('.streak-pill .num').textContent = currentStreak();
+      document.querySelectorAll('.pillar-card').forEach(card=>{
+        const p = card.dataset.pillar;
+        const habits = state.habits[p];
+        const doneCount = habits.filter(h=>d.checks[h.id]).length;
+        card.querySelector('.count').textContent = doneCount+'/'+habits.length;
+      });
+    }
+  }
+
+  function renderStats(){
+    const container = document.getElementById('tab-content');
+    // Last 7 days bar chart
+    let days7 = [];
+    for(let i=6;i>=0;i--) days7.push(todayKey(-i));
+    let barHtml = '<div class="bar-chart">';
+    days7.forEach(key=>{
+      const pct = state.days[key] ? overallCompletion(key) : 0;
+      const d = new Date(key+'T00:00:00');
+      barHtml += `<div class="bar-col">
+        <div class="bar-track"><div class="bar-fill" style="height:${Math.max(pct*100,2)}%"></div></div>
+        <div class="bar-day">${WEEKDAYS_VI[d.getDay()]}</div>
+      </div>`;
+    });
+    barHtml += '</div>';
+
+    // Heatmap last 98 days
+    let days98 = [];
+    for(let i=97;i>=0;i--) days98.push(todayKey(-i));
+    let hmHtml = '<div class="heatmap">';
+    days98.forEach(key=>{
+      const pct = state.days[key] ? overallCompletion(key) : null;
+      let bg = 'var(--line)';
+      if(pct!==null){
+        if(pct>=0.85) bg = 'var(--teal)';
+        else if(pct>=0.5) bg = '#7FB8AF';
+        else if(pct>0) bg = 'var(--teal-soft)';
+      }
+      hmHtml += `<div class="hm-cell" style="background:${bg}" title="${key}: ${pct===null?'chưa có dữ liệu':Math.round(pct*100)+'%'}"></div>`;
+    });
+    hmHtml += '</div>';
+    hmHtml += `<div class="heatmap-legend">
+      <span>Ít</span>
+      <div class="hm-cell" style="background:var(--line)"></div>
+      <div class="hm-cell" style="background:var(--teal-soft)"></div>
+      <div class="hm-cell" style="background:#7FB8AF"></div>
+      <div class="hm-cell" style="background:var(--teal)"></div>
+      <span>Đều đặn</span>
+    </div>`;
+
+    // Sparklines: sleep + weight last 14 days
+    let days14 = [];
+    for(let i=13;i>=0;i--) days14.push(todayKey(-i));
+    const sleepVals = days14.map(k=> state.days[k]?.sleepHours ?? null);
+    const weightVals = days14.map(k=> state.days[k]?.weightKg ?? null);
+
+    function sparkSvg(vals, color){
+      const nums = vals.filter(v=>v!==null && v!==undefined);
+      if(nums.length<2) return '<div class="empty-note">Chưa đủ dữ liệu</div>';
+      const min = Math.min(...nums), max = Math.max(...nums);
+      const range = (max-min)||1;
+      const w=200,h=38, step = w/(vals.length-1);
+      let pts=[]; let lastX=0,lastY=h/2;
+      vals.forEach((v,i)=>{
+        if(v===null||v===undefined) return;
+        const x = i*step;
+        const y = h - ((v-min)/range)*h;
+        pts.push(x+','+y);
+        lastX=x; lastY=y;
+      });
+      return `<svg class="spark" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none">
+        <polyline points="${pts.join(' ')}" fill="none" stroke="${color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>`;
+    }
+    const lastSleep = [...sleepVals].reverse().find(v=>v!==null&&v!==undefined);
+    const lastWeight = [...weightVals].reverse().find(v=>v!==null&&v!==undefined);
+
+    const sparkHtml = `<div class="sparkline-row">
+      <div class="spark-box">
+        <div class="label">Giờ ngủ (14 ngày)</div>
+        <div class="val">${lastSleep!==undefined?lastSleep+'h':'—'}</div>
+        ${sparkSvg(sleepVals, PILLAR_META.rest.color)}
+      </div>
+      <div class="spark-box">
+        <div class="label">Cân nặng (14 ngày)</div>
+        <div class="val">${lastWeight!==undefined?lastWeight+'kg':'—'}</div>
+        ${sparkSvg(weightVals, PILLAR_META.nutrition.color)}
+      </div>
+    </div>`;
+
+    const shareHtml = `<div class="share-card">
+      <h4>Chia sẻ tuần này với David</h4>
+      <p>Gửi nhanh bảng tóm tắt 7 ngày qua qua Zalo/Messenger để David theo dõi và góp ý cho bạn.</p>
+      <button class="share-btn" id="share-week-btn">Chia sẻ tóm tắt tuần →</button>
+    </div>`;
+
+    container.innerHTML = `
+      ${shareHtml}
+      <div class="stats-section">
+        <h4>7 ngày gần nhất</h4>
+        ${barHtml}
+      </div>
+      <div class="stats-section">
+        <h4>Nhịp đều đặn (98 ngày)</h4>
+        ${hmHtml}
+      </div>
+      <div class="stats-section">
+        <h4>Chỉ số cơ thể</h4>
+        ${sparkHtml}
+      </div>
+    `;
+    document.getElementById('share-week-btn').addEventListener('click', shareWeekSummary);
+  }
+
+  async function init(){
+    await loadState();
+    renderApp();
+  }
+  init();
+})();
+</script>
+</body>
+</html>
