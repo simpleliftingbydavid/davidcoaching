@@ -1,0 +1,1268 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js"></script>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,500&family=Be+Vietnam+Pro:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:'Be Vietnam Pro',system-ui,sans-serif;-webkit-font-smoothing:antialiased;
+    min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:40px 20px;
+    background:
+      radial-gradient(circle at 12% 8%, rgba(221,122,59,.10), transparent 42%),
+      radial-gradient(circle at 88% 96%, rgba(20,33,61,.10), transparent 48%),
+      #faf8f4;}
+  .scroll::-webkit-scrollbar{width:0;height:0;}
+  .scroll{scrollbar-width:none;}
+  textarea,input{font-family:'Be Vietnam Pro',sans-serif;}
+  textarea:focus,input:focus{outline:none;border-color:#dd7a3b;}
+  /* Trên điện thoại thật: bỏ khung mô phỏng, app phủ kín màn hình thay vì hiện lồng trong 1 khung điện thoại giả */
+  @media (max-width: 480px) {
+    body{padding:0 !important;align-items:stretch !important;min-height:100dvh;}
+    .dc-bezel{width:100vw !important;background:transparent !important;padding:0 !important;border-radius:0 !important;box-shadow:none !important;}
+    .dc-screen{width:100vw !important;height:100dvh !important;border-radius:0 !important;}
+    .dc-notch{display:none !important;}
+    .dc-statusbar{display:none !important;}
+    .dc-scrollarea{top:0 !important;}
+  }
+</style>
+</helmet>
+
+<template id="__bundler_thumbnail">
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <rect width="100" height="100" rx="20" fill="#dd7a3b"></rect>
+  <circle cx="50" cy="53" r="17" fill="none" stroke="#faf8f4" stroke-width="3"></circle>
+  <path d="M50 45 C44 49 44 57 50 62 C56 57 56 49 50 45 Z" fill="#faf8f4"></path>
+  <line x1="50" y1="47" x2="50" y2="61" stroke="#dd7a3b" stroke-width="1.6"></line>
+  <circle cx="50" cy="53" r="24" fill="none" stroke="#faf8f4" stroke-width="1.5" stroke-dasharray="100 51" stroke-linecap="round" transform="rotate(-90 50 53)"></circle>
+</svg>
+</template>
+
+<!-- ===================== DEVICE ===================== -->
+<div class="dc-bezel" style="width:402px;background:#14213d;border-radius:54px;padding:11px;box-shadow:0 40px 80px rgba(40,28,16,.4),0 8px 22px rgba(40,28,16,.25)">
+<div class="dc-screen" style="position:relative;width:380px;height:822px;background:#faf8f4;border-radius:44px;overflow:hidden;background-image:radial-gradient(circle at 14% 6%, rgba(221,122,59,.09), transparent 40%),radial-gradient(circle at 90% 98%, rgba(20,33,61,.09), transparent 46%)">
+
+  <!-- notch -->
+  <div class="dc-notch" style="position:absolute;top:11px;left:50%;transform:translateX(-50%);width:118px;height:30px;background:#14213d;border-radius:18px;z-index:40"></div>
+
+  <!-- status bar -->
+  <div class="dc-statusbar" style="position:absolute;top:0;left:0;right:0;height:52px;display:flex;align-items:flex-end;justify-content:space-between;padding:0 26px 7px;font-size:13px;font-weight:600;color:#201d1a;z-index:30">
+    <span>{{ clock }}</span>
+    <span style="letter-spacing:1px;font-size:12px">▮▮▮ ◌ ▰</span>
+  </div>
+
+  <!-- ===================== SCROLL AREA ===================== -->
+  <div class="scroll dc-scrollarea" ref="{{ scrollRef }}" style="position:absolute;top:52px;left:0;right:0;bottom:{{ bottomInset }};overflow-y:auto;overflow-x:hidden">
+
+    <!-- ============ HOME ============ -->
+    <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+    <div data-screen-label="Trang chủ" style="padding:8px 22px 30px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-top:6px">
+        <a href="../index.html" style="font-family:'Playfair Display',serif;font-weight:800;font-size:19px;letter-spacing:-.01em;color:#201d1a;text-decoration:none">David Coaching</a>
+        <div onClick="{{ goProfile }}" style="width:34px;height:34px;border-radius:50%;background:#e7e0d5;border:1px solid #e7e0d5;display:flex;align-items:center;justify-content:center;color:#bd6329;cursor:pointer">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c0-4 3.5-6 8-6s8 2 8 6"></path></svg>
+        </div>
+      </div>
+
+      <div style="font-size:12px;letter-spacing:.26em;text-transform:uppercase;font-weight:600;color:#dd7a3b;margin-top:30px">Cá nhân hoá dinh dưỡng</div>
+      <div style="font-family:'Playfair Display',serif;font-weight:800;font-size:38px;line-height:1.04;letter-spacing:-.015em;color:#201d1a;margin-top:12px">Xây <span style="font-style:italic;font-weight:500;color:#dd7a3b">nếp ăn</span> bền vững cho riêng bạn</div>
+      <div style="font-size:15.5px;font-weight:300;color:#423e3a;line-height:1.62;margin-top:14px">Bắt đầu từ những điều cơ bản nhất — đủ năng lượng, đủ đạm, đủ rau. Đơn giản để bạn lặp lại mỗi ngày.</div>
+
+      <!-- plan preview card -->
+      <div style="background:#ffffff;border:1px solid #e7e0d5;border-radius:22px;padding:22px;margin-top:24px;box-shadow:0 12px 28px rgba(40,28,16,.10)">
+        <div style="font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:#bd6329">Kế hoạch hôm nay</div>
+        <div style="display:flex;align-items:center;gap:20px;margin-top:14px">
+          <div style="position:relative;width:118px;height:118px;flex-shrink:0">
+            <svg viewBox="0 0 120 120" style="width:118px;height:118px;display:block"><circle cx="60" cy="60" r="52" fill="none" stroke="#e7e0d5" stroke-width="12"></circle><circle cx="60" cy="60" r="52" fill="none" stroke="#dd7a3b" stroke-width="12" stroke-linecap="round" stroke-dasharray="{{ homeRingDash }}" transform="rotate(-90 60 60)"></circle></svg>
+            <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center"><div style="font-family:'Playfair Display',serif;font-weight:800;font-size:25px;color:#201d1a;line-height:1">{{ homeKcal }}</div><div style="font-size:10.5px;color:#6b6560">kcal mục tiêu</div></div>
+          </div>
+          <div style="flex:1;display:flex;flex-direction:column;gap:9px">
+            <div><div style="display:flex;justify-content:space-between;font-size:13px;color:#423e3a"><span>Đạm</span><b style="color:#201d1a">{{ homePLabel }}</b></div><div style="height:7px;background:#e7e0d5;border-radius:8px;margin-top:4px"><div style="width:{{ homePW }};height:100%;background:#dd7a3b;border-radius:8px"></div></div></div>
+            <div><div style="display:flex;justify-content:space-between;font-size:13px;color:#423e3a"><span>Tinh bột</span><b style="color:#201d1a">{{ homeCLabel }}</b></div><div style="height:7px;background:#e7e0d5;border-radius:8px;margin-top:4px"><div style="width:{{ homeCW }};height:100%;background:#bd6329;border-radius:8px"></div></div></div>
+            <div><div style="display:flex;justify-content:space-between;font-size:13px;color:#423e3a"><span>Béo</span><b style="color:#201d1a">{{ homeFLabel }}</b></div><div style="height:7px;background:#e7e0d5;border-radius:8px;margin-top:4px"><div style="width:{{ homeFW }};height:100%;background:#bd6329;border-radius:8px"></div></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div onClick="{{ homeCtaAction }}" style="margin-top:18px;background:#dd7a3b;color:#faf8f4;text-align:center;font-weight:600;font-size:16px;padding:17px;border-radius:16px;box-shadow:0 10px 22px rgba(126,45,27,.28);cursor:pointer">{{ homeCtaLabel }}</div>
+      <div style="text-align:center;font-size:12.5px;color:#6b6560;margin-top:10px">{{ homeSub }}</div>
+
+      <!-- pyramid principle -->
+      <div style="margin-top:34px;border-top:2px solid #201d1a;padding-top:20px">
+        <div style="font-family:'Playfair Display',serif;font-weight:700;font-size:22px;color:#201d1a;letter-spacing:-.01em">Bắt đầu từ nền tháp</div>
+        <div style="font-size:14px;font-weight:300;color:#423e3a;line-height:1.6;margin-top:6px">Tầng dưới quan trọng hơn tầng trên. Làm chủ phần cơ bản trước.</div>
+        <div style="display:flex;flex-direction:column;gap:10px;margin-top:16px">
+          <div style="display:flex;align-items:center;gap:14px;background:#ffffff;border:1px solid #e7e0d5;border-radius:14px;padding:13px 16px">
+            <div style="font-family:'Playfair Display',serif;font-weight:800;font-size:22px;color:#bd6329;line-height:1;width:30px">01</div>
+            <div><div style="font-weight:600;color:#201d1a;font-size:15px">Cân bằng năng lượng</div><div style="font-size:12.5px;color:#6b6560">Tổng calo — yếu tố quan trọng nhất</div></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:14px;background:#ffffff;border:1px solid #e7e0d5;border-radius:14px;padding:13px 16px">
+            <div style="font-family:'Playfair Display',serif;font-weight:800;font-size:22px;color:#bf6438;line-height:1;width:30px">02</div>
+            <div><div style="font-weight:600;color:#201d1a;font-size:15px">Chất đa lượng (đạm &amp; macro)</div><div style="font-size:12.5px;color:#6b6560">Đặc biệt là đủ đạm</div></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:14px;background:#ffffff;border:1px solid #e7e0d5;border-radius:14px;padding:13px 16px">
+            <div style="font-family:'Playfair Display',serif;font-weight:800;font-size:22px;color:#dd7a3b;line-height:1;width:30px">03</div>
+            <div><div style="font-weight:600;color:#201d1a;font-size:15px">Rau · Nước · Chất xơ</div><div style="font-size:12.5px;color:#6b6560">Đạt qua khẩu phần tổng thể</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </sc-if>
+
+    <!-- ============ LOCKED (chưa có hồ sơ) ============ -->
+    <sc-if value="{{ showLocked }}" hint-placeholder-val="{{ false }}">
+    <div data-screen-label="Chưa có kế hoạch" style="padding:60px 30px;display:flex;flex-direction:column;align-items:center;text-align:center;min-height:100%;justify-content:center">
+      <div style="width:78px;height:78px;border-radius:50%;background:#f3ddc9;display:flex;align-items:center;justify-content:center">
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#dd7a3b" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg>
+      </div>
+      <div style="font-family:'Playfair Display',serif;font-weight:700;font-size:23px;color:#201d1a;margin-top:22px">Chưa có kế hoạch</div>
+      <div style="font-size:14.5px;font-weight:300;color:#423e3a;margin-top:10px;line-height:1.6;max-width:260px">Hoàn thành bộ câu hỏi để David Coaching tính thực đơn &amp; mục tiêu dinh dưỡng riêng cho bạn.</div>
+      <div onClick="{{ goIntake }}" style="margin-top:24px;background:#dd7a3b;color:#faf8f4;font-weight:600;font-size:15.5px;padding:15px 30px;border-radius:15px;box-shadow:0 10px 22px rgba(126,45,27,.28);cursor:pointer">Bắt đầu trả lời →</div>
+    </div>
+    </sc-if>
+
+    <!-- ============ INTAKE (WIZARD) ============ -->
+    <sc-if value="{{ isIntake }}" hint-placeholder-val="{{ false }}">
+    <div data-screen-label="Câu hỏi đầu vào" style="padding:8px 22px 26px;display:flex;flex-direction:column;min-height:100%">
+      <!-- header: back + progress + counter -->
+      <div style="display:flex;align-items:center;gap:13px;margin-top:6px">
+        <div onClick="{{ prev }}" style="width:34px;height:34px;border-radius:50%;border:1px solid #e7e0d5;background:#ffffff;display:flex;align-items:center;justify-content:center;font-size:18px;color:#423e3a;cursor:pointer;line-height:1;flex-shrink:0">←</div>
+        <div style="flex:1"><div style="height:7px;background:#e7e0d5;border-radius:10px;overflow:hidden"><div style="width:{{ progressPct }};height:100%;background:#dd7a3b;border-radius:10px;transition:width .3s ease"></div></div></div>
+        <div style="font-size:12px;font-weight:600;color:#6b6560;flex-shrink:0">{{ stepCounter }}</div>
+      </div>
+
+      <!-- step content -->
+      <div style="flex:1;padding-top:24px">
+        <!-- STEP 0 · goal -->
+        <sc-if value="{{ st0 }}" hint-placeholder-val="{{ true }}">
+          <div style="font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;font-weight:600;color:#bd6329">Tên của bạn</div>
+          <div style="font-family:'Playfair Display',serif;font-weight:700;font-size:25px;color:#201d1a;line-height:1.18;margin-top:8px">Mình gọi bạn là gì nhỉ?</div>
+          <input value="{{ vName }}" onChange="{{ onName }}" placeholder="VD: Minh, chị Lan, anh Tú…" style="width:100%;margin-top:14px;background:#ffffff;border:1.5px solid #e7e0d5;border-radius:14px;padding:14px 15px;font-size:15px;color:#201d1a" />
+          <div style="height:1px;background:#e2d8c6;margin:24px 0 4px"></div>
+          <div style="font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;font-weight:600;color:#bd6329">Mục tiêu</div>
+          <div style="font-family:'Playfair Display',serif;font-weight:700;font-size:25px;color:#201d1a;line-height:1.18;margin-top:8px">Mục tiêu cụ thể hiện tại của bạn là gì?</div>
+          <div style="font-size:13.5px;font-weight:300;color:#6b6560;line-height:1.55;margin-top:8px">Cứ viết tự nhiên — càng cụ thể, gợi ý càng sát.</div>
+          <textarea value="{{ vGoal }}" onChange="{{ onGoal }}" placeholder="VD: giảm ~4kg trong 2 tháng, bụng gọn hơn mà vẫn đủ sức tập…" style="width:100%;margin-top:16px;background:#ffffff;border:1.5px solid #e7e0d5;border-radius:14px;padding:14px 15px;font-size:15px;color:#201d1a;line-height:1.55;min-height:122px;resize:none"></textarea>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:14px">
+            <span style="background:#f3ddc9;border:1px solid #e7e0d5;color:#bd6329;font-size:12.5px;padding:7px 13px;border-radius:30px">Giảm mỡ</span>
+            <span style="background:#f3ddc9;border:1px solid #e7e0d5;color:#bd6329;font-size:12.5px;padding:7px 13px;border-radius:30px">Tăng cơ</span>
+            <span style="background:#f3ddc9;border:1px solid #e7e0d5;color:#bd6329;font-size:12.5px;padding:7px 13px;border-radius:30px">Ăn đều đặn hơn</span>
+            <span style="background:#f3ddc9;border:1px solid #e7e0d5;color:#bd6329;font-size:12.5px;padding:7px 13px;border-radius:30px">Khoẻ tiêu hoá</span>
+          </div>
+        </sc-if>
+
+        <!-- STEP 1 · metrics -->
+        <sc-if value="{{ st1 }}" hint-placeholder-val="{{ false }}">
+          <div style="font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;font-weight:600;color:#bd6329">Cơ thể</div>
+          <div style="font-family:'Playfair Display',serif;font-weight:700;font-size:25px;color:#201d1a;line-height:1.18;margin-top:8px">Vài số liệu cơ bản về bạn</div>
+          <div style="font-size:13.5px;font-weight:300;color:#6b6560;line-height:1.55;margin-top:8px">Dùng để ước tính nhu cầu năng lượng &amp; lượng đạm.</div>
+          <div style="margin-top:18px">
+            <div style="font-family:'Playfair Display',serif;font-weight:600;font-size:16px;color:#bd6329">Chiều cao</div>
+            <input value="{{ vHeight }}" onChange="{{ onHeight }}" placeholder="VD: 172 cm" style="width:100%;margin-top:8px;background:#ffffff;border:1.5px solid #e7e0d5;border-radius:13px;padding:14px 15px;font-size:15px;color:#201d1a" />
+          </div>
+          <div style="margin-top:16px">
+            <div style="font-family:'Playfair Display',serif;font-weight:600;font-size:16px;color:#bd6329">Cân nặng</div>
+            <input value="{{ vWeight }}" onChange="{{ onWeight }}" placeholder="VD: 70 kg" style="width:100%;margin-top:8px;background:#ffffff;border:1.5px solid #e7e0d5;border-radius:13px;padding:14px 15px;font-size:15px;color:#201d1a" />
+          </div>
+          <div style="margin-top:16px">
+            <div style="font-family:'Playfair Display',serif;font-weight:600;font-size:16px;color:#bd6329">Tuổi</div>
+            <input value="{{ vAge }}" onChange="{{ onAge }}" placeholder="VD: 29" style="width:100%;margin-top:8px;background:#ffffff;border:1.5px solid #e7e0d5;border-radius:13px;padding:14px 15px;font-size:15px;color:#201d1a" />
+          </div>
+        </sc-if>
+
+        <!-- STEP 2 · job -->
+        <sc-if value="{{ st2 }}" hint-placeholder-val="{{ false }}">
+          <div style="font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;font-weight:600;color:#bd6329">Sinh hoạt</div>
+          <div style="font-family:'Playfair Display',serif;font-weight:700;font-size:25px;color:#201d1a;line-height:1.18;margin-top:8px">Công việc hiện tại của bạn là gì?</div>
+          <div style="font-size:13.5px;font-weight:300;color:#6b6560;line-height:1.55;margin-top:8px">Giúp ước tính mức vận động trong ngày.</div>
+          <textarea value="{{ vJob }}" onChange="{{ onJob }}" placeholder="Mô tả tính chất công việc, mức độ ngồi/đi lại…" style="width:100%;margin-top:16px;background:#ffffff;border:1.5px solid #e7e0d5;border-radius:14px;padding:14px 15px;font-size:15px;color:#201d1a;line-height:1.55;min-height:110px;resize:none"></textarea>
+        </sc-if>
+
+        <!-- STEP 3 · sleep -->
+        <sc-if value="{{ st3 }}" hint-placeholder-val="{{ false }}">
+          <div style="font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;font-weight:600;color:#bd6329">Sinh hoạt</div>
+          <div style="font-family:'Playfair Display',serif;font-weight:700;font-size:25px;color:#201d1a;line-height:1.18;margin-top:8px">Bạn có hay thức đêm không? Thường ngủ lúc mấy giờ?</div>
+          <div style="font-size:13.5px;font-weight:300;color:#6b6560;line-height:1.55;margin-top:8px">Giấc ngủ ảnh hưởng tới thèm ăn &amp; hồi phục.</div>
+          <textarea value="{{ vSleep }}" onChange="{{ onSleep }}" placeholder="VD: hay thức khuya, ngủ lúc 1h…" style="width:100%;margin-top:16px;background:#ffffff;border:1.5px solid #e7e0d5;border-radius:14px;padding:14px 15px;font-size:15px;color:#201d1a;line-height:1.55;min-height:110px;resize:none"></textarea>
+        </sc-if>
+
+        <!-- STEP 4 · stomach -->
+        <sc-if value="{{ st4 }}" hint-placeholder-val="{{ false }}">
+          <div style="font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;font-weight:600;color:#bd6329">Sức khoẻ</div>
+          <div style="font-family:'Playfair Display',serif;font-weight:700;font-size:25px;color:#201d1a;line-height:1.18;margin-top:8px">Bạn có vấn đề gì về dạ dày &amp; tiêu hoá không?</div>
+          <div style="font-size:13.5px;font-weight:300;color:#6b6560;line-height:1.55;margin-top:8px">Để tránh món gây khó chịu &amp; chọn cách chế biến hợp.</div>
+          <textarea value="{{ vStomach }}" onChange="{{ onStomach }}" placeholder="VD: đầy hơi, ợ chua, dễ đau bụng khi ăn cay…" style="width:100%;margin-top:16px;background:#ffffff;border:1.5px solid #e7e0d5;border-radius:14px;padding:14px 15px;font-size:15px;color:#201d1a;line-height:1.55;min-height:110px;resize:none"></textarea>
+        </sc-if>
+
+        <!-- STEP 5 · foods -->
+        <sc-if value="{{ st5 }}" hint-placeholder-val="{{ false }}">
+          <div style="font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;font-weight:600;color:#bd6329">Thói quen ăn</div>
+          <div style="font-family:'Playfair Display',serif;font-weight:700;font-size:25px;color:#201d1a;line-height:1.18;margin-top:8px">Bạn thường ăn những thực phẩm nào?</div>
+          <div style="font-size:13.5px;font-weight:300;color:#6b6560;line-height:1.55;margin-top:8px">Liệt kê càng đầy đủ càng tốt — cơm, món mặn, rau, đồ uống, ăn vặt…</div>
+          <textarea value="{{ vFoods }}" onChange="{{ onFoods }}" placeholder="VD: cơm, ức gà, trứng, rau muống, chuối, cà phê sữa, mì gói…" style="width:100%;margin-top:16px;background:#ffffff;border:1.5px solid #e7e0d5;border-radius:14px;padding:14px 15px;font-size:15px;color:#201d1a;line-height:1.55;min-height:142px;resize:none"></textarea>
+        </sc-if>
+
+        <!-- STEP 6 · meals -->
+        <sc-if value="{{ st6 }}" hint-placeholder-val="{{ false }}">
+          <div style="font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;font-weight:600;color:#bd6329">Thói quen ăn</div>
+          <div style="font-family:'Playfair Display',serif;font-weight:700;font-size:25px;color:#201d1a;line-height:1.18;margin-top:8px">Một ngày bạn ăn mấy bữa? Giờ cụ thể từng bữa?</div>
+          <div style="font-size:13.5px;font-weight:300;color:#6b6560;line-height:1.55;margin-top:8px">Để xếp thực đơn đúng nhịp ăn của bạn.</div>
+          <textarea value="{{ vMeals }}" onChange="{{ onMeals }}" placeholder="VD: 3 bữa — 7:00 / 12:00 / 19:30, có ăn vặt chiều…" style="width:100%;margin-top:16px;background:#ffffff;border:1.5px solid #e7e0d5;border-radius:14px;padding:14px 15px;font-size:15px;color:#201d1a;line-height:1.55;min-height:110px;resize:none"></textarea>
+        </sc-if>
+
+        <!-- STEP 7 · supplements -->
+        <sc-if value="{{ st7 }}" hint-placeholder-val="{{ false }}">
+          <div style="font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;font-weight:600;color:#bd6329">Bổ sung</div>
+          <div style="font-family:'Playfair Display',serif;font-weight:700;font-size:25px;color:#201d1a;line-height:1.18;margin-top:8px">Hiện bạn đang dùng thực phẩm bổ sung gì?</div>
+          <div style="font-size:13.5px;font-weight:300;color:#6b6560;line-height:1.55;margin-top:8px">Whey, dầu cá, creatine, vitamin… hoặc “không có”.</div>
+          <textarea value="{{ vSupps }}" onChange="{{ onSupps }}" placeholder="VD: whey, dầu cá omega-3…" style="width:100%;margin-top:16px;background:#ffffff;border:1.5px solid #e7e0d5;border-radius:14px;padding:14px 15px;font-size:15px;color:#201d1a;line-height:1.55;min-height:100px;resize:none"></textarea>
+          <div style="background:#f3ddc9;border:1px solid #e7e0d5;border-radius:12px;padding:12px 15px;margin-top:16px;font-size:12.5px;color:#7a3f14;line-height:1.5">🔒 Thông tin chỉ dùng để cá nhân hoá thực đơn của bạn, không chia sẻ.</div>
+        </sc-if>
+      </div>
+
+      <!-- continue -->
+      <div onClick="{{ next }}" style="margin-top:20px;background:#dd7a3b;color:#faf8f4;text-align:center;font-weight:600;font-size:16px;padding:17px;border-radius:16px;box-shadow:0 10px 22px rgba(126,45,27,.28);cursor:pointer">{{ continueLabel }}</div>
+    </div>
+    </sc-if>
+
+    <!-- ============ MENU ============ -->
+    <sc-if value="{{ isMenu }}" hint-placeholder-val="{{ false }}">
+    <div data-screen-label="Thực đơn" style="padding:8px 22px 30px">
+      <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-top:6px">
+        <div>
+          <div style="font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;font-weight:600;color:#bd6329">Thực đơn cá nhân</div>
+          <div style="font-family:'Playfair Display',serif;font-weight:700;font-size:26px;color:#201d1a;line-height:1.1;margin-top:3px">{{ todayLabel }}</div>
+        </div>
+      </div>
+
+      <!-- ring + totals -->
+      <div style="background:#ffffff;border:1px solid #e7e0d5;border-radius:22px;padding:22px;margin-top:18px;box-shadow:0 12px 28px rgba(40,28,16,.10);text-align:center">
+        <div style="font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:#bd6329">Hôm nay đã nạp</div>
+        <div style="position:relative;width:172px;height:172px;margin:14px auto 4px">
+          <svg viewBox="0 0 120 120" style="width:172px;height:172px;display:block"><circle cx="60" cy="60" r="52" fill="none" stroke="#e7e0d5" stroke-width="11"></circle><circle cx="60" cy="60" r="52" fill="none" stroke="#dd7a3b" stroke-width="11" stroke-linecap="round" stroke-dasharray="{{ ringDash }}" transform="rotate(-90 60 60)" style="transition:stroke-dasharray .5s ease"></circle></svg>
+          <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center"><div style="font-family:'Playfair Display',serif;font-weight:800;font-size:36px;color:#201d1a;line-height:1">{{ consumedLabel }}</div><div style="font-size:12px;color:#6b6560">{{ targetKcalLabel }}</div><div style="font-size:11px;color:#dd7a3b;font-weight:600;margin-top:3px">{{ remainLabel }}</div></div>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:12px">
+          <div style="flex:1;background:#f3ddc9;border-radius:13px;padding:11px 4px"><div style="font-size:11px;color:#dd7a3b;font-weight:600">Đạm</div><div style="font-family:'Playfair Display',serif;font-weight:700;font-size:15px;color:#201d1a">{{ pPair }}</div></div>
+          <div style="flex:1;background:#e3e9f5;border-radius:13px;padding:11px 4px"><div style="font-size:11px;color:#bd6329;font-weight:600">Tinh bột</div><div style="font-family:'Playfair Display',serif;font-weight:700;font-size:15px;color:#201d1a">{{ cPair }}</div></div>
+          <div style="flex:1;background:#f3ddc9;border-radius:13px;padding:11px 4px"><div style="font-size:11px;color:#bd6329;font-weight:600">Béo</div><div style="font-family:'Playfair Display',serif;font-weight:700;font-size:15px;color:#201d1a">{{ fPair }}</div></div>
+        </div>
+      </div>
+
+      <!-- why -->
+      <div style="background:linear-gradient(180deg,#ffffff,#f3ddc9);border:1px solid #e7e0d5;border-left:4px solid #bd6329;border-radius:12px;padding:15px 17px;margin-top:18px">
+        <div style="font-size:11px;letter-spacing:.18em;text-transform:uppercase;font-weight:700;color:#bd6329">Vì sao thực đơn này</div>
+        <div style="font-size:13.5px;color:#423e3a;margin-top:5px;line-height:1.55">{{ menuWhy }}</div>
+      </div>
+
+      <!-- water tracker + reminder -->
+      <div style="background:linear-gradient(160deg,#eaf2f4,#dfeaee);border:1px solid #bcd2d8;border-radius:18px;padding:18px;margin-top:18px">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <div style="display:flex;align-items:center;gap:9px">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2f7c93" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z"></path></svg>
+            <div style="font-family:'Playfair Display',serif;font-weight:700;font-size:17px;color:#1f5566">Uống nước</div>
+          </div>
+          <div style="font-size:13px;font-weight:600;color:#1f5566">{{ waterLabel }}</div>
+        </div>
+        <div style="height:8px;background:#cfe0e5;border-radius:8px;margin-top:12px;overflow:hidden"><div style="width:{{ waterPct }};height:100%;background:#3d92ac;border-radius:8px;transition:width .4s ease"></div></div>
+        <div style="display:flex;flex-wrap:wrap;gap:7px;margin-top:14px">
+          <sc-for list="{{ waterCups }}" as="c" hint-placeholder-count="8">
+            <div style="width:26px;height:32px;border-radius:4px 4px 7px 7px;border:1.5px solid #7fb0bf;background:{{ c.fill }};display:flex;align-items:flex-end;justify-content:center;overflow:hidden"></div>
+          </sc-for>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;margin-top:16px">
+          <div onClick="{{ removeWater }}" style="width:46px;height:46px;border-radius:13px;background:#ffffff;border:1px solid #bcd2d8;color:#1f5566;font-size:24px;font-weight:600;display:flex;align-items:center;justify-content:center;cursor:pointer">−</div>
+          <div onClick="{{ addWater }}" style="flex:1;height:46px;border-radius:13px;background:#3d92ac;color:#fff;font-weight:600;font-size:15px;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer">+ Thêm 1 ly (250 ml)</div>
+        </div>
+        <div onClick="{{ toggleRemind }}" style="margin-top:10px;height:44px;border-radius:13px;background:{{ remindBg }};border:1px solid #7fb0bf;color:{{ remindColor }};font-weight:600;font-size:14px;display:flex;align-items:center;justify-content:center;gap:7px;cursor:pointer">{{ remindLabel }}</div>
+        <sc-if value="{{ hasRemindNote }}" hint-placeholder-val="{{ false }}"><div style="font-size:11.5px;color:#1f5566;margin-top:8px;line-height:1.5;text-align:center">{{ remindNote }}</div></sc-if>
+        <div style="font-size:11.5px;color:#5b8593;margin-top:8px;line-height:1.5;text-align:center">Khi bật, app nhắc uống nước mỗi ~90 phút lúc đang mở. Mẹo: để chai nước trong tầm mắt và uống 1 ly trước mỗi bữa.</div>
+      </div>
+
+      <div style="font-size:12px;color:#6b6560;margin-top:18px;display:flex;align-items:center;gap:6px">Chạm vào món để xem nguyên liệu &amp; cách làm</div>
+
+      <!-- meals (data-driven) -->
+      <div style="margin-top:2px">
+        <sc-for list="{{ meals }}" as="m" hint-placeholder-count="4">
+          <div style="display:flex;gap:16px;padding:18px 0;border-bottom:1px solid #e7e0d5">
+            <div onClick="{{ m.onTap }}" style="width:64px;height:64px;border-radius:14px;border:1px solid #e7e0d5;flex-shrink:0;cursor:pointer;background-color:#faf8f4;background-size:cover;background-position:center;background-image:{{ m.img }}"></div>
+            <div style="flex:1">
+              <div onClick="{{ m.onTap }}" style="cursor:pointer">
+                <div style="display:flex;justify-content:space-between;align-items:baseline">
+                  <div style="display:flex;align-items:center;gap:8px">
+                    <div style="font-family:'Playfair Display',serif;font-weight:700;font-size:16px;color:#dd7a3b">{{ m.name }}</div>
+                    <sc-if value="{{ m.hasBadge }}" hint-placeholder-val="{{ false }}"><span style="font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:#bd6329;background:#e3e9f5;padding:2px 7px;border-radius:20px">{{ m.badge }}</span></sc-if>
+                  </div>
+                  <div style="font-size:12px;color:#6b6560">{{ m.timeKcal }}</div>
+                </div>
+                <div style="font-size:15px;color:#201d1a;font-weight:500;margin-top:2px">{{ m.dishName }}</div>
+                <div style="display:flex;gap:7px;margin-top:8px;font-size:11.5px"><span style="background:#f3ddc9;color:#dd7a3b;padding:3px 9px;border-radius:20px">{{ m.pLabel }}</span><span style="background:#e3e9f5;color:#bd6329;padding:3px 9px;border-radius:20px">{{ m.cLabel }}</span><span style="background:#f3ddc9;color:#bd6329;padding:3px 9px;border-radius:20px">{{ m.fLabel }}</span></div>
+              </div>
+              <div style="display:flex;align-items:center;gap:16px;margin-top:12px">
+                <div onClick="{{ m.onToggle }}" style="display:inline-flex;align-items:center;gap:8px;cursor:pointer">
+                  <div style="width:21px;height:21px;border-radius:6px;border:1.5px solid {{ m.checkBorder }};background:{{ m.checkBg }};display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:700">{{ m.checkMark }}</div>
+                  <span style="font-size:12.5px;font-weight:600;color:{{ m.checkColor }}">{{ m.checkLabel }}</span>
+                </div>
+                <sc-if value="{{ m.canSwap }}" hint-placeholder-val="{{ false }}">
+                  <div onClick="{{ m.onSwap }}" style="display:inline-flex;align-items:center;gap:6px;cursor:pointer;color:#bd6329;font-size:12.5px;font-weight:600;background:#f3ddc9;border:1px solid #e7e0d5;border-radius:20px;padding:8px 14px">↻ Đổi món</div>
+                </sc-if>
+              </div>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+    </sc-if>
+
+    <!-- ============ RECS ============ -->
+    <sc-if value="{{ isRecs }}" hint-placeholder-val="{{ false }}">
+    <div data-screen-label="Khuyến nghị" style="padding:8px 22px 30px">
+      <div style="font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;font-weight:600;color:#bd6329;margin-top:6px">Nền tảng của tháp</div>
+      <div style="font-family:'Playfair Display',serif;font-weight:700;font-size:25px;color:#201d1a;line-height:1.14;margin-top:5px">Mức tối thiểu mỗi ngày để ăn kiêng hiệu quả</div>
+      <div style="font-size:14px;font-weight:300;color:#423e3a;line-height:1.6;margin-top:9px">Tính từ thực phẩm bạn đang ăn. Cứ đạt các mức cơ bản này trước — phần này chiếm phần lớn kết quả.</div>
+
+      <!-- why -->
+      <div style="background:linear-gradient(180deg,#ffffff,#f3ddc9);border:1px solid #e7e0d5;border-left:4px solid #bd6329;border-radius:12px;padding:14px 16px;margin-top:18px">
+        <div style="font-size:11px;letter-spacing:.18em;text-transform:uppercase;font-weight:700;color:#bd6329">Vì sao các mức này</div>
+        <div style="font-size:13px;color:#423e3a;margin-top:4px;line-height:1.55">{{ recsWhy }}</div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:12px;margin-top:18px">
+        <!-- protein -->
+        <div style="background:#ffffff;border:1px solid #e7e0d5;border-radius:16px;padding:16px 18px">
+          <div style="display:flex;justify-content:space-between;align-items:baseline"><div style="font-family:'Playfair Display',serif;font-weight:700;font-size:17px;color:#201d1a">Đạm</div><div style="font-family:'Playfair Display',serif;font-weight:800;font-size:19px;color:#dd7a3b">{{ recProtein }}</div></div>
+          <div style="height:8px;background:#e7e0d5;border-radius:8px;margin-top:10px;overflow:hidden"><div style="width:{{ recProteinBar }};height:100%;background:#dd7a3b"></div></div>
+          <div style="font-size:12px;color:#6b6560;margin-top:5px">{{ recProteinDone }}</div>
+          <div style="font-size:13px;color:#423e3a;margin-top:8px;line-height:1.5">{{ recProteinNote }}</div>
+        </div>
+        <!-- veg -->
+        <div style="background:#ffffff;border:1px solid #e7e0d5;border-radius:16px;padding:16px 18px">
+          <div style="display:flex;justify-content:space-between;align-items:baseline"><div style="font-family:'Playfair Display',serif;font-weight:700;font-size:17px;color:#201d1a">Rau xanh &amp; củ</div><div style="font-family:'Playfair Display',serif;font-weight:800;font-size:19px;color:#bd6329">{{ recVeg }}</div></div>
+          <div style="font-size:12px;color:#6b6560;margin-top:6px">Chất xơ &amp; vi chất · theo dõi qua bữa ăn</div>
+          <div style="font-size:13px;color:#423e3a;margin-top:8px;line-height:1.5">Tăng rau muống/cải; thêm 1 phần rau vào bữa sáng để dễ tiêu hoá.</div>
+        </div>
+        <!-- water -->
+        <div style="background:#ffffff;border:1px solid #e7e0d5;border-radius:16px;padding:16px 18px">
+          <div style="display:flex;justify-content:space-between;align-items:baseline"><div style="font-family:'Playfair Display',serif;font-weight:700;font-size:17px;color:#201d1a">Nước</div><div style="font-family:'Playfair Display',serif;font-weight:800;font-size:19px;color:#3d7f9c">{{ recWater }}</div></div>
+          <div style="font-size:12px;color:#6b6560;margin-top:6px">~35 ml × cân nặng mỗi ngày</div>
+          <div style="font-size:13px;color:#423e3a;margin-top:8px;line-height:1.5">Giảm đồ uống ngọt &amp; cà phê sữa; bù nước nhất là quanh buổi tập.</div>
+        </div>
+        <!-- fat -->
+        <div style="background:#ffffff;border:1px solid #e7e0d5;border-radius:16px;padding:16px 18px">
+          <div style="display:flex;justify-content:space-between;align-items:baseline"><div style="font-family:'Playfair Display',serif;font-weight:700;font-size:17px;color:#201d1a">Chất béo tốt</div><div style="font-family:'Playfair Display',serif;font-weight:800;font-size:19px;color:#bd6329">{{ recFat }}</div></div>
+          <div style="height:8px;background:#e7e0d5;border-radius:8px;margin-top:10px;overflow:hidden"><div style="width:{{ recFatBar }};height:100%;background:#bd6329"></div></div>
+          <div style="font-size:12px;color:#6b6560;margin-top:5px">{{ recFatDone }}</div>
+          <div style="font-size:13px;color:#423e3a;margin-top:8px;line-height:1.5">Ưu tiên cá béo, hạt, dầu ô liu thay cho mỡ &amp; đồ chiên.</div>
+        </div>
+        <!-- fiber -->
+        <div style="background:#ffffff;border:1px solid #e7e0d5;border-radius:16px;padding:16px 18px">
+          <div style="display:flex;justify-content:space-between;align-items:baseline"><div style="font-family:'Playfair Display',serif;font-weight:700;font-size:17px;color:#201d1a">Chất xơ</div><div style="font-family:'Playfair Display',serif;font-weight:800;font-size:19px;color:#bd6329">{{ recFiber }}</div></div>
+          <div style="font-size:12px;color:#6b6560;margin-top:6px">Tăng từ từ 2–5 g mỗi tuần</div>
+          <div style="font-size:13px;color:#423e3a;margin-top:8px;line-height:1.5">Ưu tiên gạo lứt, rau, trái cây nguyên quả thay vì nước ép.</div>
+        </div>
+      </div>
+
+      <!-- substitution -->
+      <div style="background:linear-gradient(160deg,#f3ddc9,#faf8f4);border:1px solid #e7e0d5;border-radius:14px;padding:15px 18px;margin-top:16px">
+        <div style="font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:#bd6329">Thay thế khuyến nghị</div>
+        <div style="font-size:14px;color:#7a3f14;margin-top:5px;line-height:1.55">{{ subText }}</div>
+      </div>
+
+      <!-- personalized tips -->
+      <div style="margin-top:30px;border-top:2px solid #201d1a;padding-top:20px">
+        <div style="font-family:'Playfair Display',serif;font-weight:700;font-size:22px;color:#201d1a;letter-spacing:-.01em">Lời khuyên cho bạn</div>
+        <div style="font-size:14px;font-weight:300;color:#423e3a;line-height:1.6;margin-top:6px">Cách duy trì kế hoạch &amp; cải thiện lối sống để đạt mục tiêu — gợi ý riêng theo câu trả lời của bạn.</div>
+        <div style="display:flex;flex-direction:column;gap:11px;margin-top:16px">
+          <sc-for list="{{ tips }}" as="t" hint-placeholder-count="5">
+            <div style="display:flex;gap:14px;background:#ffffff;border:1px solid #e7e0d5;border-radius:14px;padding:15px 16px">
+              <div style="width:38px;height:38px;flex-shrink:0;border-radius:11px;background:#f3ddc9;display:flex;align-items:center;justify-content:center">{{ t.iconEl }}</div>
+              <div style="flex:1">
+                <div style="font-weight:600;color:#201d1a;font-size:15px">{{ t.title }}</div>
+                <div style="font-size:13px;color:#423e3a;line-height:1.55;margin-top:3px">{{ t.text }}</div>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+
+      <a href="../dinh-duong.html" style="display:flex;align-items:center;justify-content:space-between;margin-top:22px;background:#14213d;color:#faf8f4;border-radius:14px;padding:16px 18px;text-decoration:none">
+        <div>
+          <div style="font-weight:700;font-size:14.5px">Muốn hiểu sâu hơn vì sao?</div>
+          <div style="font-size:12.5px;color:#c7cede;margin-top:2px">Đọc nguyên lý đầy đủ trên David Coaching</div>
+        </div>
+        <div style="font-size:18px">→</div>
+      </a>
+    </div>
+    </sc-if>
+
+    <!-- ============ DISH DETAIL ============ -->
+    <sc-if value="{{ isDish }}" hint-placeholder-val="{{ false }}">
+    <div data-screen-label="Chi tiết món" style="padding:8px 22px 30px">
+      <div onClick="{{ goMenu }}" style="display:inline-flex;align-items:center;gap:8px;margin-top:6px;cursor:pointer;color:#423e3a">
+        <div style="width:34px;height:34px;border-radius:50%;border:1px solid #e7e0d5;background:#ffffff;display:flex;align-items:center;justify-content:center;font-size:18px;line-height:1">←</div>
+        <span style="font-size:13px;font-weight:600">Thực đơn</span>
+      </div>
+
+      <div style="font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;font-weight:600;color:#bd6329;margin-top:18px">{{ selName }} · {{ selTimeKcal }}</div>
+      <div style="font-family:'Playfair Display',serif;font-weight:700;font-size:26px;color:#201d1a;line-height:1.18;margin-top:6px">{{ selDish }}</div>
+
+      <div style="height:180px;border-radius:18px;border:1px solid #e7e0d5;margin-top:16px;background-color:#faf8f4;background-size:cover;background-position:center;background-image:{{ selImg }}"></div>
+      <sc-if value="{{ selCanSwap }}" hint-placeholder-val="{{ false }}">
+        <div onClick="{{ selSwap }}" style="display:flex;align-items:center;justify-content:center;gap:8px;margin-top:12px;background:#f3ddc9;border:1px solid #e7e0d5;color:#7a3f14;font-weight:600;font-size:14px;padding:13px;border-radius:13px;cursor:pointer">{{ selSwapLabel }}</div>
+        <div style="font-size:12px;color:#6b6560;margin-top:6px;text-align:center">Ngán món này? Đổi sang nguyên liệu khác mà bạn hay ăn — vẫn giữ đúng macro.</div>
+      </sc-if>
+
+      <!-- macro -->
+      <div style="display:flex;gap:8px;margin-top:14px">
+        <div style="flex:1;background:#f3ddc9;border-radius:13px;padding:12px 4px;text-align:center"><div style="font-size:11px;color:#dd7a3b;font-weight:600">Đạm</div><div style="font-family:'Playfair Display',serif;font-weight:700;font-size:17px;color:#201d1a">{{ selP }}</div></div>
+        <div style="flex:1;background:#e3e9f5;border-radius:13px;padding:12px 4px;text-align:center"><div style="font-size:11px;color:#bd6329;font-weight:600">Tinh bột</div><div style="font-family:'Playfair Display',serif;font-weight:700;font-size:17px;color:#201d1a">{{ selC }}</div></div>
+        <div style="flex:1;background:#f3ddc9;border-radius:13px;padding:12px 4px;text-align:center"><div style="font-size:11px;color:#bd6329;font-weight:600">Béo</div><div style="font-family:'Playfair Display',serif;font-weight:700;font-size:17px;color:#201d1a">{{ selF }}</div></div>
+      </div>
+
+      <!-- ingredients -->
+      <div style="font-family:'Playfair Display',serif;font-weight:700;font-size:18px;color:#201d1a;margin-top:24px">Nguyên liệu</div>
+      <div style="background:#ffffff;border:1px solid #e7e0d5;border-radius:16px;margin-top:10px;overflow:hidden">
+        <sc-for list="{{ selIngredients }}" as="ing" hint-placeholder-count="4">
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:13px 16px;border-bottom:1px solid #e7e0d5;font-size:14px"><span style="color:#201d1a">{{ ing.n }}</span><span style="color:#6b6560;font-weight:600">{{ ing.q }}</span></div>
+        </sc-for>
+      </div>
+
+      <!-- steps -->
+      <div style="font-family:'Playfair Display',serif;font-weight:700;font-size:18px;color:#201d1a;margin-top:22px">Cách làm</div>
+      <div style="display:flex;flex-direction:column;gap:12px;margin-top:12px">
+        <sc-for list="{{ selSteps }}" as="st" hint-placeholder-count="3">
+          <div style="display:flex;gap:13px;align-items:flex-start">
+            <div style="width:26px;height:26px;flex-shrink:0;border-radius:50%;background:#f3ddc9;color:#dd7a3b;font-family:'Playfair Display',serif;font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:center">{{ st.num }}</div>
+            <div style="font-size:14.5px;color:#3a342b;line-height:1.55;padding-top:2px">{{ st.text }}</div>
+          </div>
+        </sc-for>
+      </div>
+
+      <!-- why -->
+      <div style="background:linear-gradient(180deg,#ffffff,#f3ddc9);border:1px solid #e7e0d5;border-left:4px solid #bd6329;border-radius:12px;padding:15px 17px;margin-top:22px">
+        <div style="font-size:11px;letter-spacing:.18em;text-transform:uppercase;font-weight:700;color:#bd6329">Vì sao món này</div>
+        <div style="font-size:13.5px;color:#423e3a;margin-top:5px;line-height:1.55">{{ selWhy }}</div>
+      </div>
+
+      <div onClick="{{ selToggle }}" style="margin-top:18px;background:{{ selBtnBg }};color:#faf8f4;text-align:center;font-weight:600;font-size:15.5px;padding:16px;border-radius:15px;cursor:pointer">{{ selBtnLabel }}</div>
+    </div>
+    </sc-if>
+
+    <!-- ============ WEEK ============ -->
+    <sc-if value="{{ isWeek }}" hint-placeholder-val="{{ false }}">
+    <div data-screen-label="Tuần" style="padding:8px 22px 30px">
+      <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-top:6px">
+        <div>
+          <div style="font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;font-weight:600;color:#bd6329">Theo dõi</div>
+          <div style="font-family:'Playfair Display',serif;font-weight:700;font-size:26px;color:#201d1a;line-height:1.1;margin-top:3px">Hôm nay</div>
+        </div>
+        <div style="font-size:12.5px;color:#6b6560">Bắt đầu hôm nay</div>
+      </div>
+
+      <!-- today ring -->
+      <div style="background:#ffffff;border:1px solid #e7e0d5;border-radius:22px;padding:22px;margin-top:18px;box-shadow:0 12px 28px rgba(40,28,16,.10);text-align:center">
+        <div style="font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:#bd6329">Năng lượng đã nạp</div>
+        <div style="position:relative;width:160px;height:160px;margin:14px auto 4px">
+          <svg viewBox="0 0 120 120" style="width:160px;height:160px;display:block"><circle cx="60" cy="60" r="52" fill="none" stroke="#e7e0d5" stroke-width="11"></circle><circle cx="60" cy="60" r="52" fill="none" stroke="#dd7a3b" stroke-width="11" stroke-linecap="round" stroke-dasharray="{{ weekRingDash }}" transform="rotate(-90 60 60)" style="transition:stroke-dasharray .5s ease"></circle></svg>
+          <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center"><div style="font-family:'Playfair Display',serif;font-weight:800;font-size:33px;color:#201d1a;line-height:1">{{ weekConsumed }}</div><div style="font-size:12px;color:#6b6560">{{ weekTargetLabel }}</div></div>
+        </div>
+        <div style="font-size:12.5px;color:#423e3a;margin-top:8px;line-height:1.5">{{ weekMacroLine }}</div>
+      </div>
+
+      <!-- 7-day history (real) -->
+      <div style="background:#ffffff;border:1px solid #e7e0d5;border-radius:18px;padding:18px;margin-top:14px">
+        <div style="display:flex;justify-content:space-between;align-items:baseline"><div style="font-size:13px;font-weight:600;color:#201d1a">7 ngày gần nhất</div><div style="font-size:11.5px;color:#6b6560">{{ daysLoggedLabel }}</div></div>
+        <div style="position:relative;height:80px;margin-top:14px;display:flex;align-items:flex-end;justify-content:space-between;gap:8px">
+          <sc-for list="{{ weekDays }}" as="d" hint-placeholder-count="7">
+            <div style="flex:1;background:{{ d.barBg }};border-radius:6px 6px 0 0;height:{{ d.barH }};transition:height .4s ease"></div>
+          </sc-for>
+        </div>
+        <div style="display:flex;justify-content:space-between;gap:8px;margin-top:8px;font-size:11px;text-align:center">
+          <sc-for list="{{ weekDays }}" as="d" hint-placeholder-count="7">
+            <div style="flex:1;color:{{ d.labelColor }};font-weight:{{ d.labelWeight }}">{{ d.label }}</div>
+          </sc-for>
+        </div>
+        <div style="font-size:12px;color:#6b6560;margin-top:12px;line-height:1.5">Biểu đồ đầy dần mỗi ngày bạn đánh dấu món đã ăn — dữ liệu lưu ngay trên máy bạn.</div>
+      </div>
+
+      <!-- consistency note -->
+      <div style="background:linear-gradient(160deg,#f3ddc9,#faf8f4);border:1px solid #e7e0d5;border-radius:14px;padding:15px 18px;margin-top:14px">
+        <div style="font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:#bd6329">Mẹo giữ nhịp</div>
+        <div style="font-size:14px;color:#7a3f14;margin-top:5px;line-height:1.55">Chỉ cần đánh dấu món đã ăn mỗi ngày. Phần khó nhất không phải ăn chuẩn một ngày, mà là sự đều đặn.</div>
+      </div>
+
+      <!-- send progress to coach -->
+      <div onClick="{{ shareProgress }}" style="margin-top:18px;background:#bd6329;color:#faf8f4;display:flex;align-items:center;justify-content:center;gap:9px;font-weight:600;font-size:15.5px;padding:16px;border-radius:15px;box-shadow:0 10px 22px rgba(20,33,61,.26);cursor:pointer">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"></path><path d="M22 2 15 22l-4-9-9-4z"></path></svg>
+        Gửi tiến độ hôm nay cho coach
+      </div>
+      <div style="text-align:center;font-size:12px;color:#6b6560;margin-top:8px;line-height:1.5">Tạo báo cáo nhanh để gửi qua Zalo, tin nhắn hoặc email.</div>
+      <sc-if value="{{ hasShareMsg }}" hint-placeholder-val="{{ false }}">
+        <div style="background:#ffffff;border:1px solid #e7e0d5;border-radius:12px;padding:13px 15px;margin-top:10px;font-size:13px;color:#7a3f14;line-height:1.55;white-space:pre-wrap">{{ shareMsg }}</div>
+      </sc-if>
+    </div>
+    </sc-if>
+
+    <!-- ============ PROFILE ============ -->
+    <sc-if value="{{ isProfile }}" hint-placeholder-val="{{ false }}">
+    <div data-screen-label="Hồ sơ" style="padding:8px 22px 30px">
+      <div style="display:flex;align-items:center;gap:15px;margin-top:8px">
+        <div style="width:60px;height:60px;border-radius:50%;background:#e7e0d5;border:1px solid #e7e0d5;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#bd6329" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c0-4 3.5-6 8-6s8 2 8 6"></path></svg>
+        </div>
+        <div>
+          <div style="font-family:'Playfair Display',serif;font-weight:700;font-size:24px;color:#201d1a;line-height:1.1">{{ profName }}</div>
+          <div style="display:inline-block;font-size:11.5px;font-weight:600;color:#dd7a3b;background:#f3ddc9;padding:4px 11px;border-radius:30px;margin-top:5px">{{ glTitle }}</div>
+        </div>
+      </div>
+
+      <!-- stats -->
+      <div style="display:flex;gap:8px;margin-top:18px">
+        <div style="flex:1;background:#ffffff;border:1px solid #e7e0d5;border-radius:13px;padding:12px 6px;text-align:center"><div style="font-family:'Playfair Display',serif;font-weight:700;font-size:17px;color:#201d1a">{{ dHeight }}</div><div style="font-size:10.5px;color:#6b6560;margin-top:2px">Chiều cao</div></div>
+        <div style="flex:1;background:#ffffff;border:1px solid #e7e0d5;border-radius:13px;padding:12px 6px;text-align:center"><div style="font-family:'Playfair Display',serif;font-weight:700;font-size:17px;color:#201d1a">{{ dWeight }}</div><div style="font-size:10.5px;color:#6b6560;margin-top:2px">Cân nặng</div></div>
+        <div style="flex:1;background:#ffffff;border:1px solid #e7e0d5;border-radius:13px;padding:12px 6px;text-align:center"><div style="font-family:'Playfair Display',serif;font-weight:700;font-size:17px;color:#201d1a">{{ dAge }}</div><div style="font-size:10.5px;color:#6b6560;margin-top:2px">Tuổi</div></div>
+        <div style="flex:1;background:#ffffff;border:1px solid #e7e0d5;border-radius:13px;padding:12px 6px;text-align:center"><div style="font-family:'Playfair Display',serif;font-weight:700;font-size:17px;color:#201d1a">{{ bmiLabel }}</div><div style="font-size:10.5px;color:#6b6560;margin-top:2px">BMI</div></div>
+      </div>
+
+      <!-- energy target -->
+      <div style="background:#ffffff;border:1px solid #e7e0d5;border-radius:18px;padding:18px;margin-top:14px;display:flex;align-items:center;gap:18px">
+        <div style="position:relative;width:96px;height:96px;flex-shrink:0">
+          <svg viewBox="0 0 120 120" style="width:96px;height:96px;display:block"><circle cx="60" cy="60" r="52" fill="none" stroke="#e7e0d5" stroke-width="13"></circle><circle cx="60" cy="60" r="52" fill="none" stroke="#dd7a3b" stroke-width="13" stroke-linecap="round" stroke-dasharray="327 327" transform="rotate(-90 60 60)"></circle></svg>
+          <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center"><div style="font-family:'Playfair Display',serif;font-weight:800;font-size:18px;color:#201d1a">{{ profKcal }}</div><div style="font-size:9px;color:#6b6560">kcal/ngày</div></div>
+        </div>
+        <div style="flex:1">
+          <div style="font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;color:#bd6329">Mục tiêu năng lượng</div>
+          <div style="font-size:13px;color:#423e3a;margin-top:4px;line-height:1.5">{{ profDeficit }}</div>
+          <div style="display:flex;gap:6px;margin-top:9px;font-size:11px">
+            <span style="background:#f3ddc9;color:#dd7a3b;padding:3px 8px;border-radius:20px">{{ profP }}</span>
+            <span style="background:#e3e9f5;color:#bd6329;padding:3px 8px;border-radius:20px">{{ profC }}</span>
+            <span style="background:#f3ddc9;color:#bd6329;padding:3px 8px;border-radius:20px">{{ profF }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- habits from answers -->
+      <div style="font-family:'Playfair Display',serif;font-weight:700;font-size:18px;color:#201d1a;margin-top:24px">Thói quen của bạn</div>
+      <div style="background:#ffffff;border:1px solid #e7e0d5;border-radius:16px;margin-top:12px;overflow:hidden">
+        <div style="display:flex;gap:13px;padding:14px 16px;border-bottom:1px solid #e7e0d5"><div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:#bd6329;width:78px;flex-shrink:0;padding-top:2px">Giấc ngủ</div><div style="font-size:13.5px;color:#201d1a;line-height:1.5">{{ dSleep }}</div></div>
+        <div style="display:flex;gap:13px;padding:14px 16px;border-bottom:1px solid #e7e0d5"><div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:#bd6329;width:78px;flex-shrink:0;padding-top:2px">Tiêu hoá</div><div style="font-size:13.5px;color:#201d1a;line-height:1.5">{{ dStomach }}</div></div>
+        <div style="display:flex;gap:13px;padding:14px 16px;border-bottom:1px solid #e7e0d5"><div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:#bd6329;width:78px;flex-shrink:0;padding-top:2px">Bữa ăn</div><div style="font-size:13.5px;color:#201d1a;line-height:1.5">{{ dMeals }}</div></div>
+        <div style="display:flex;gap:13px;padding:14px 16px"><div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:#bd6329;width:78px;flex-shrink:0;padding-top:2px">Bổ sung</div><div style="font-size:13.5px;color:#201d1a;line-height:1.5">{{ dSupps }}</div></div>
+      </div>
+
+      <div onClick="{{ goIntake }}" style="margin-top:16px;background:#ffffff;border:1.5px solid #dd7a3b;color:#dd7a3b;text-align:center;font-weight:600;font-size:15px;padding:15px;border-radius:14px;cursor:pointer">Chỉnh sửa câu trả lời</div>
+
+      <!-- settings -->
+      <div style="background:#ffffff;border:1px solid #e7e0d5;border-radius:16px;margin-top:14px;overflow:hidden">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:15px 16px;border-bottom:1px solid #e7e0d5;font-size:14px;color:#201d1a"><span>Nhắc nhở uống nước</span><span style="color:#6b6560">›</span></div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:15px 16px;border-bottom:1px solid #e7e0d5;font-size:14px;color:#201d1a"><span>Đơn vị đo</span><span style="color:#6b6560;font-size:13px">kg · cm ›</span></div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:15px 16px;font-size:14px;color:#201d1a"><span>Quyền riêng tư &amp; dữ liệu</span><span style="color:#6b6560">›</span></div>
+      </div>
+    </div>
+    </sc-if>
+
+  </div>
+
+  <!-- ===================== BOTTOM TAB BAR ===================== -->
+  <sc-if value="{{ showTabs }}" hint-placeholder-val="{{ true }}">
+  <div style="position:absolute;bottom:0;left:0;right:0;height:80px;background:rgba(251,247,238,.94);backdrop-filter:blur(8px);border-top:1px solid #e7e0d5;display:flex;align-items:flex-start;padding-top:11px;z-index:20">
+    <div onClick="{{ goHome }}" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;color:{{ homeColor }}">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"></path><path d="M5 9.5V21h14V9.5"></path></svg>
+      <span style="font-size:10px;font-weight:600">Trang chủ</span>
+    </div>
+    <div onClick="{{ goWeek }}" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;color:{{ weekColor }}">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"></rect><path d="M3 9h18M8 3v4M16 3v4"></path></svg>
+      <span style="font-size:10px;font-weight:600">Tuần</span>
+    </div>
+    <div onClick="{{ goMenu }}" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;color:{{ menuColor }}">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="7"></circle><path d="M12 9v4l2.5 2"></path></svg>
+      <span style="font-size:10px;font-weight:600">Thực đơn</span>
+    </div>
+    <div onClick="{{ goRecs }}" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;color:{{ recsColor }}">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l2 2 4-4"></path><rect x="4" y="4" width="16" height="16" rx="3"></rect></svg>
+      <span style="font-size:10px;font-weight:600">Khuyến nghị</span>
+    </div>
+    <div onClick="{{ goProfile }}" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;color:{{ profileColor }}">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c0-4 3.5-6 8-6s8 2 8 6"></path></svg>
+      <span style="font-size:10px;font-weight:600">Hồ sơ</span>
+    </div>
+  </div>
+  </sc-if>
+
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:442,&quot;height&quot;:902}}">
+class Component extends DCLogic {
+  TOTAL = 8;
+  STORE = 'nep_plan_v3';
+  // Kho thực phẩm — macro trên 100 g (trừ khi ghi rõ). Dùng để nhận diện từ câu trả lời của khách.
+  FOODS = [
+    // ĐẠM
+    { key: 'uc_ga', cat: 'protein', name: 'Ức gà', det: /ức gà|uc ga|ngực gà|nguc ga/, p: 31, c: 0, f: 3.6, prep: 'áp chảo', lean: true },
+    { key: 'ga', cat: 'protein', name: 'Thịt gà', det: /thịt gà|thit ga|đùi gà|dui ga|gà /, p: 27, c: 0, f: 8, prep: 'luộc' },
+    { key: 'trung', cat: 'protein', name: 'Trứng gà', det: /trứng|trung|hột gà|hot ga/, p: 13, c: 1, f: 10.6, prep: 'luộc', each: 50, unit: 'quả', maxG: 150 },
+    { key: 'heo', cat: 'protein', name: 'Thịt heo nạc', det: /thịt heo|thit heo|thịt lợn|thit lon|nạc heo|nac heo|sườn|suon/, p: 27, c: 0, f: 14, prep: 'luộc' },
+    { key: 'bo', cat: 'protein', name: 'Thịt bò', det: /thịt bò|thit bo|bắp bò|ba chỉ bò|bò /, p: 26, c: 0, f: 15, prep: 'áp chảo' },
+    { key: 'ca_hoi', cat: 'protein', name: 'Cá hồi', det: /cá hồi|ca hoi|salmon/, p: 20, c: 0, f: 13, prep: 'hấp', omega: true },
+    { key: 'ca', cat: 'protein', name: 'Cá', det: /cá thu|ca thu|cá basa|cá ngừ|cá nục|cá diêu hồng|cá rô|cá lóc|cá |^cá| cá/, p: 20, c: 0, f: 5, prep: 'hấp', lean: true },
+    { key: 'tom', cat: 'protein', name: 'Tôm', det: /tôm|tom|mực|muc|hải sản|hai san|cua|ghẹ/, p: 24, c: 0, f: 1, prep: 'luộc', lean: true },
+    { key: 'dau_phu', cat: 'protein', name: 'Đậu phụ', det: /đậu phụ|đậu hũ|dau phu|tàu hũ|tofu|đậu nành|dau nanh/, p: 8, c: 2, f: 4, prep: 'sốt', lean: true, veg: true },
+    { key: 'yogurt', cat: 'dairy', name: 'Sữa chua Hy Lạp', det: /sữa chua|sua chua|yaourt|yogurt/, p: 10, c: 5, f: 1.5, prep: '', maxG: 200 },
+    // TINH BỘT
+    { key: 'gao_lut', cat: 'carb', name: 'Cơm gạo lứt', det: /gạo lứt|gao lut|cơm lứt|com lut/, p: 2.6, c: 25, f: 0.9, prep: 'nấu', good: true },
+    { key: 'com', cat: 'carb', name: 'Cơm trắng', det: /cơm trắng|cơm|com trang|^com| com/, p: 2.7, c: 28, f: 0.3, prep: 'nấu' },
+    { key: 'khoai_lang', cat: 'carb', name: 'Khoai lang', det: /khoai lang/, p: 1.6, c: 20, f: 0.1, prep: 'hấp', good: true },
+    { key: 'khoai_tay', cat: 'carb', name: 'Khoai tây', det: /khoai tây|khoai tay/, p: 2, c: 17, f: 0.1, prep: 'hấp' },
+    { key: 'yen_mach', cat: 'carb', name: 'Yến mạch', det: /yến mạch|yen mach|oat/, p: 13, c: 66, f: 7, prep: 'nấu', good: true, breakfast: true },
+    { key: 'bun_pho', cat: 'carb', name: 'Bún/Phở', det: /bún|bun|phở|pho |bánh phở|hủ tiếu|hu tieu|miến|mien|bánh canh/, p: 3, c: 25, f: 0.2, prep: 'trụng' },
+    { key: 'banh_mi', cat: 'carb', name: 'Bánh mì nguyên cám', det: /bánh mì|banh mi|bánh mỳ/, p: 9, c: 49, f: 3, prep: '', breakfast: true },
+    // RAU
+    { key: 'rau_muong', cat: 'veg', name: 'Rau muống', det: /rau muống|rau muong/, p: 2.6, c: 3.1, f: 0.2, prep: 'luộc' },
+    { key: 'cai', cat: 'veg', name: 'Cải xanh', det: /cải|cai|bông cải|bong cai|súp lơ|sup lo|bắp cải|cải bó xôi|cải thìa|rau ngót|mồng tơi/, p: 2.8, c: 4, f: 0.3, prep: 'luộc' },
+    { key: 'xa_lach', cat: 'veg', name: 'Xà lách & cà chua', det: /xà lách|xa lach|salad|rau sống|rau song|cà chua|dưa leo|dưa chuột|bông cải xanh/, p: 1.2, c: 3, f: 0.2, prep: 'trộn' },
+    { key: 'bi_do', cat: 'veg', name: 'Bí đỏ / củ quả', det: /bí đỏ|bi do|bí xanh|cà rốt|ca rot|su su|đậu que|đậu cô ve/, p: 1.2, c: 7, f: 0.1, prep: 'luộc' },
+    // TRÁI CÂY
+    { key: 'chuoi', cat: 'fruit', name: 'Chuối', det: /chuối|chuoi/, p: 1.1, c: 23, f: 0.3, prep: '', each: 100, unit: 'quả' },
+    { key: 'tao', cat: 'fruit', name: 'Táo', det: /táo|tao /, p: 0.3, c: 14, f: 0.2, prep: '', each: 150, unit: 'quả' },
+    { key: 'cam', cat: 'fruit', name: 'Cam / quýt', det: /cam|quýt|quyt|bưởi|buoi/, p: 0.9, c: 12, f: 0.1, prep: '', each: 130, unit: 'quả' },
+    { key: 'tao_chung', cat: 'fruit', name: 'Trái cây theo mùa', det: /ổi|oi |đu đủ|du du|thanh long|dứa|thơm|xoài|xoai|nho|dâu|kiwi|lê|bơ|việt quất/, p: 0.8, c: 13, f: 0.2, prep: '' },
+    // CHẤT BÉO
+    { key: 'dau_oliu', cat: 'fat', name: 'Dầu ô liu', det: /dầu ô liu|dau o liu|dầu olive|dầu ôliu|dầu oliu|olive/, p: 0, c: 0, f: 100, prep: '', oil: true },
+    { key: 'hat', cat: 'fat', name: 'Hạt (óc chó/hạnh nhân)', det: /hạt|hat|óc chó|oc cho|hạnh nhân|hanh nhan|điều|hạt chia|macca|hướng dương/, p: 15, c: 20, f: 55, prep: '', maxG: 30 },
+    { key: 'bo_dau', cat: 'fat', name: 'Bơ đậu phộng', det: /bơ đậu phộng|bo dau phong|đậu phộng|lạc/, p: 25, c: 20, f: 50, prep: '', maxG: 30 },
+  ];
+  // dấu hiệu thực phẩm nên hạn chế
+  BAD = [
+    { det: /mì gói|mi goi|mì tôm|mi tom|mì ăn liền|mì ăn lien/, label: 'mì gói', swap: 'bữa nhẹ giàu đạm (sữa chua Hy Lạp + trái cây) hoặc bún/phở nấu rau' },
+    { det: /chiên|rán|ran |xào nhiều dầu|đồ chiên/, label: 'đồ chiên rán', swap: 'món luộc, hấp hoặc áp chảo ít dầu' },
+    { det: /nước ngọt|nuoc ngot|coca|pepsi|trà sữa|tra sua|nước có ga|sting|red bull/, label: 'nước ngọt / trà sữa', swap: 'nước lọc, trà không đường hoặc nước ép không thêm đường' },
+    { det: /cà phê sữa|ca phe sua|bạc xỉu|cafe sữa/, label: 'cà phê sữa đá', swap: 'cà phê đen hoặc cà phê ít đường, tối đa 1 ly/ngày' },
+    { det: /bánh ngọt|banh ngot|kẹo|keo |snack|khoai tây chiên|gà rán|pizza|xúc xích|đồ ăn nhanh/, label: 'đồ ngọt / ăn vặt đóng gói', swap: 'trái cây, sữa chua không đường hoặc một nắm hạt' },
+  ];
+  TARGET = { kcal: 1850, p: 112, c: 180, f: 52 };
+  fmt(n) { return String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, '.'); }
+  ymd(dt) { return dt.getFullYear() + '-' + String(dt.getMonth() + 1).padStart(2, '0') + '-' + String(dt.getDate()).padStart(2, '0'); }
+  todayKey() { return this.ymd(new Date()); }
+  num(v) { const m = String(v == null ? '' : v).replace(',', '.').match(/\d+(\.\d+)?/); return m ? parseFloat(m[0]) : 0; }
+  dec1(n) { return (Math.round(n * 10) / 10).toFixed(1).replace('.', ','); }
+  plan() {
+    const a = this.state.answers;
+    const w = this.num(a.weight), h = this.num(a.height), age = this.num(a.age);
+    const has = w > 0;
+    const g = (a.goal || '').toLowerCase();
+    let goalType = 'maintain';
+    if (/giảm|giam|cắt|gọn|gon|mỡ|sụt|thon/.test(g)) goalType = 'cut';
+    else if (/tăng|tang|lên cân|to hơn|cơ bắp|co bap|bulk|mập|to ra/.test(g)) goalType = 'bulk';
+    const j = (a.job || '').toLowerCase();
+    let act = 1.5;
+    if (/văn phòng|van phong|ngồi|ngoi|ít vận động|it van dong|lái xe|tài xế|tai xe|công sở/.test(j)) act = 1.4;
+    else if (/lao động|lao dong|công nhân|cong nhan|bưng|bê|đứng|chạy|chay|giao hàng|giao hang|thợ|nặng nhọc|vận động viên|huấn luyện|bộ đội|nông|xây|bốc/.test(j)) act = 1.7;
+    const tdee = 22 * w * act;
+    const factor = goalType === 'cut' ? 0.80 : goalType === 'bulk' ? 1.08 : 1.0;
+    const kcal = Math.round(tdee * factor / 10) * 10;
+    const p = Math.round((goalType === 'cut' ? 2.0 : 1.6) * w);
+    const f = Math.max(40, Math.round(0.25 * kcal / 9));
+    const c = Math.max(0, Math.round((kcal - p * 4 - f * 9) / 4));
+    const water = 35 * w / 1000;
+    const fiber = Math.round(20 + Math.max(0, (kcal - 1500) / 100));
+    const bmi = h > 0 ? w / Math.pow(h / 100, 2) : 0;
+    return { w, h, age, has, goalType, kcal, p, c, f, water, fiber, bmi };
+  }
+  // nhận diện các thực phẩm khách liệt kê
+  detectFoods() {
+    const txt = ((this.state.answers.foods || '') + ' ' + (this.state.answers.supps || '')).toLowerCase();
+    const found = [];
+    const seen = {};
+    for (const fd of this.FOODS) {
+      if (fd.det.test(txt) && !seen[fd.key]) { found.push(fd); seen[fd.key] = true; }
+    }
+    const bads = this.BAD.filter((b) => b.det.test(txt));
+    return { found, bads, txt };
+  }
+  pool(found, cat) { return found.filter((f) => f.cat === cat); }
+  round5(n) { return Math.max(5, Math.round(n / 5) * 5); }
+  dispQty(food, g) {
+    if (food.oil) { const t = Math.max(1, Math.round(g / 5)); return t === 1 ? '1 thìa cà phê (~5 g)' : t + ' thìa cà phê (~' + (t * 5) + ' g)'; }
+    if (food.each) { const n = Math.max(1, Math.round(g / food.each)); return n + ' ' + food.unit + ' (~' + (n * food.each) + ' g)'; }
+    if (food.key === 'yen_mach') return g + ' g (khô)';
+    if (food.cat === 'carb' && (food.key === 'com' || food.key === 'gao_lut')) return g + ' g cơm (~' + this.round5(g / 2.5) + ' g gạo)';
+    return g + ' g';
+  }
+  macroOf(food, g) { return { p: food.p * g / 100, c: food.c * g / 100, f: food.f * g / 100, kcal: (food.p * 4 + food.c * 4 + food.f * 9) * g / 100 }; }
+  // dựng 1 bữa từ protein + carb + rau (+ béo) để đạt macro mục tiêu của bữa
+  composeMeal(scaffold, picks, tP, tC, tF) {
+    const ing = [];
+    let p = 0, c = 0, f = 0, kcal = 0;
+    const names = [];
+    const steps = [];
+    const cats = {};
+    const add = (food, g) => {
+      const m = this.macroOf(food, g);
+      p += m.p; c += m.c; f += m.f; kcal += m.kcal;
+      cats[food.cat] = true;
+      ing.push({ n: food.name, q: this.dispQty(food, g) });
+    };
+    // protein (chiếm ~85% đạm bữa)
+    if (picks.protein) {
+      let g = this.round5((tP * 0.88) / (picks.protein.p / 100));
+      const cap = picks.protein.maxG || 250;
+      g = Math.min(Math.max(g, 60), cap);
+      add(picks.protein, g);
+      names.push(picks.protein.name + (picks.protein.prep ? ' ' + picks.protein.prep : ''));
+      if (picks.protein.prep) steps.push(this.prepStep(picks.protein, g));
+    }
+    // carb
+    if (picks.carb && tC > 4) {
+      let g = this.round5(tC / (picks.carb.c / 100));
+      g = Math.min(Math.max(g, 30), 280);
+      add(picks.carb, g);
+      names.push(picks.carb.name);
+      steps.push(this.prepStep(picks.carb, g));
+    }
+    // rau (cho bữa chính)
+    if (picks.veg) {
+      const g = 150;
+      add(picks.veg, g);
+      names.push(picks.veg.name + ' ' + (picks.veg.prep || 'luộc'));
+      steps.push(picks.veg.prep === 'trộn' ? 'Trộn ' + picks.veg.name.toLowerCase() + ' với chút dầu và chanh.' : (picks.veg.name + ' ' + (picks.veg.prep || 'luộc') + ' vừa chín tới, giữ độ giòn.'));
+    }
+    // trái cây (bữa sáng/phụ)
+    if (picks.fruit) {
+      const g = picks.fruit.each || 120;
+      add(picks.fruit, g);
+      names.push(picks.fruit.name);
+    }
+    // béo bù phần còn thiếu
+    const remF = tF - f;
+    if (picks.fat && remF > 4) {
+      const cap = picks.fat.maxG || 20;
+      let g = Math.min(this.round5(remF / (picks.fat.f / 100)), cap);
+      if (g >= 4) { add(picks.fat, g); if (picks.fat.oil) names.push('dầu ô liu'); else names.push(picks.fat.name.toLowerCase()); }
+    }
+    return {
+      id: scaffold.id, name: scaffold.name, time: scaffold.time, badge: scaffold.badge,
+      kcal: Math.round(kcal), p: Math.round(p), c: Math.round(c), f: Math.round(f),
+      dish: names.join(' · '),
+      ingredients: ing,
+      steps: steps.length ? steps : ['Sơ chế và nấu chín các nguyên liệu, ưu tiên luộc/hấp.'],
+      comp: { protein: !!(cats.protein || cats.dairy), carb: !!cats.carb, veg: !!cats.veg, fruit: !!cats.fruit, fat: !!cats.fat },
+    };
+  }
+  // minh hoạ món ăn: đĩa với các phần thành phần (đạm/tinh bột/rau/trái cây) — data URI SVG
+  dishImg(meal) {
+    const c = meal.comp || {};
+    const blobs = [];
+    if (c.protein) blobs.push({ x: 78, y: 76, r: 27, fill: '#c15a3e' });
+    if (c.carb) blobs.push({ x: 124, y: 72, r: 24, fill: '#e7c485' });
+    if (c.veg) blobs.push({ x: 102, y: 104, r: 23, fill: '#6c7a48' });
+    if (c.fruit) blobs.push({ x: 138, y: 108, r: 15, fill: '#c98a6a' });
+    if (!blobs.length) blobs.push({ x: 100, y: 88, r: 28, fill: '#c8a06a' });
+    const mounds = blobs.map((b) => '<circle cx="' + b.x + '" cy="' + b.y + '" r="' + b.r + '" fill="' + b.fill + '"/><ellipse cx="' + (b.x - b.r * 0.3) + '" cy="' + (b.y - b.r * 0.4) + '" rx="' + (b.r * 0.38) + '" ry="' + (b.r * 0.26) + '" fill="rgba(255,255,255,.22)"/>').join('');
+    const svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 150">'
+      + '<rect width="200" height="150" fill="#faf8f4"/>'
+      + '<ellipse cx="100" cy="92" rx="80" ry="50" fill="#eadfca"/>'
+      + '<ellipse cx="100" cy="88" rx="72" ry="46" fill="#fdfaf3"/>'
+      + '<ellipse cx="100" cy="88" rx="58" ry="36" fill="none" stroke="#ece1cd" stroke-width="2"/>'
+      + mounds
+      + '</svg>';
+    return 'url("data:image/svg+xml,' + encodeURIComponent(svg) + '")';
+  }
+  prepStep(food, g) {
+    const nm = food.name.toLowerCase();
+    if (food.prep === 'áp chảo') return 'Áp chảo ' + nm + ' với chút dầu, nêm nhẹ muối tiêu.';
+    if (food.prep === 'hấp') return 'Hấp ' + nm + ' 10–12 phút cho chín tới.';
+    if (food.prep === 'luộc') return 'Luộc ' + nm + ' chín tới.';
+    if (food.prep === 'nấu') return 'Nấu ' + nm + ' chín.';
+    if (food.prep === 'trụng') return 'Trụng ' + nm + ' với nước sôi, chan nước dùng rau.';
+    if (food.prep === 'sốt') return 'Sốt nhẹ ' + nm + ' với cà chua, ít dầu.';
+    return 'Chuẩn bị ' + nm + '.';
+  }
+  buildMenu(P) {
+    const { found, bads } = this.detectFoods();
+    const a = this.state.answers;
+    const cut = P.goalType === 'cut';
+    const stoSensitive = /đầy hơi|day hoi|khó tiêu|kho tieu|dạ dày|da day|ợ|trào ngược|trao nguoc|viêm/.test((a.stomach || '').toLowerCase());
+    // pools từ món của khách, có fallback hợp lý
+    const F = (k) => this.FOODS.find((x) => x.key === k);
+    let proteins = this.pool(found, 'protein').concat(this.pool(found, 'dairy'));
+    if (!proteins.length) proteins = [F('uc_ga'), F('trung'), F('ca')];
+    let carbs = this.pool(found, 'carb');
+    if (cut) carbs = carbs.slice().sort((x, y) => (y.good ? 1 : 0) - (x.good ? 1 : 0));
+    if (!carbs.length) carbs = cut ? [F('gao_lut'), F('khoai_lang')] : [F('com'), F('gao_lut')];
+    let vegs = this.pool(found, 'veg');
+    if (!vegs.length) vegs = [F('rau_muong'), F('cai'), F('xa_lach')];
+    let fruits = this.pool(found, 'fruit');
+    if (!fruits.length) fruits = [F('chuoi'), F('tao')];
+    let fats = this.pool(found, 'fat');
+    if (!fats.length) fats = [F('dau_oliu'), F('hat')];
+    // top-up: đảm bảo mỗi nhóm có ≥3 lựa chọn để bữa nào cũng đổi món được (món khách khai đứng đầu)
+    const topUp = (arr, keys) => {
+      const have = new Set(arr.map((x) => x.key));
+      for (const k of keys) { if (arr.length >= 3) break; if (!have.has(k)) { arr = arr.concat(F(k)); have.add(k); } }
+      return arr;
+    };
+    proteins = topUp(proteins, cut ? ['uc_ga', 'ca', 'trung', 'tom', 'dau_phu'] : ['uc_ga', 'trung', 'heo', 'ca', 'bo']);
+    carbs = topUp(carbs, cut ? ['gao_lut', 'khoai_lang', 'yen_mach'] : ['com', 'gao_lut', 'khoai_lang']);
+    vegs = topUp(vegs, ['rau_muong', 'cai', 'xa_lach', 'bi_do']);
+    fruits = topUp(fruits, ['chuoi', 'tao', 'cam', 'tao_chung']);
+    fats = topUp(fats, ['dau_oliu', 'hat', 'bo_dau']);
+    // nếu nhạy cảm tiêu hoá: ưu tiên protein nạc + cách chế biến nhẹ
+    if (stoSensitive) proteins = proteins.slice().sort((x, y) => (y.lean ? 1 : 0) - (x.lean ? 1 : 0));
+    const pick = (arr, i) => arr.length ? arr[i % arr.length] : null;
+    // giờ ăn từ câu trả lời nếu có
+    const times = this.parseTimes(a.meals);
+    const breakfastCarb = found.find((f) => f.cat === 'carb' && f.breakfast) || (fruits.length ? null : F('banh_mi'));
+    const proteinBreak = found.find((f) => f.key === 'trung') || found.find((f) => f.cat === 'dairy') || proteins[0];
+    const scaffolds = [
+      { id: 'sang', name: 'Bữa sáng', time: times.sang, pct: 0.26, kind: 'breakfast' },
+      { id: 'trua', name: 'Bữa trưa', time: times.trua, pct: 0.33, kind: 'main' },
+      { id: 'phu', name: 'Bữa phụ', time: times.phu, pct: 0.11, kind: 'snack', badge: 'Bữa nhẹ' },
+      { id: 'toi', name: 'Bữa tối', time: times.toi, pct: 0.30, kind: 'main' },
+    ];
+    const swaps = this.state.swaps || {};
+    const meals = scaffolds.map((sc, idx) => {
+      const tP = P.p * sc.pct, tC = P.c * sc.pct, tF = P.f * sc.pct;
+      const off = swaps[sc.id] || 0;
+      let picks, altCount;
+      if (sc.kind === 'breakfast') {
+        const bcarbs = breakfastCarb ? [breakfastCarb].concat(carbs.filter((x) => x.key !== breakfastCarb.key)) : carbs;
+        picks = { protein: proteinBreak, carb: pick(bcarbs, off), fruit: pick(fruits, off), fat: null };
+        altCount = Math.max(bcarbs.length, fruits.length);
+      } else if (sc.kind === 'snack') {
+        const dairy = found.find((f) => f.cat === 'dairy');
+        const hasWhey = /whey|protein/.test((a.supps || '').toLowerCase());
+        const snackProts = [];
+        if (dairy) snackProts.push(dairy);
+        if (hasWhey) snackProts.push({ key: 'whey', cat: 'protein', name: 'Whey protein', p: 80, c: 8, f: 6, maxG: 35, prep: '' });
+        if (!snackProts.length) snackProts.push(proteins[0]);
+        picks = { protein: pick(snackProts, off), fruit: pick(fruits, off + 1), fat: pick(fats, off + 1) };
+        altCount = Math.max(snackProts.length, fruits.length);
+      } else {
+        picks = { protein: pick(proteins, idx + off), carb: pick(carbs, idx + off), veg: pick(vegs, idx + off), fat: pick(fats, off) };
+        altCount = Math.max(proteins.length, carbs.length, vegs.length);
+      }
+      const meal = this.composeMeal(sc, picks, tP, tC, tF);
+      meal.why = this.mealWhy(sc, picks, P, stoSensitive, a);
+      meal.altCount = altCount;
+      return meal;
+    });
+    return { meals, bads };
+  }
+  parseTimes(txt) {
+    const def = { sang: '7:00', trua: '12:00', phu: '15:30', toi: '19:30' };
+    if (!txt) return def;
+    const re = /([0-2]?\d)\s*[:h]\s*([0-5]\d)?/g;
+    const hits = [];
+    let m;
+    while ((m = re.exec(txt)) && hits.length < 6) {
+      const hh = parseInt(m[1], 10); const mm = m[2] ? m[2] : '00';
+      if (hh >= 0 && hh <= 23) hits.push(hh + ':' + mm);
+    }
+    if (hits.length >= 3) return { sang: hits[0], trua: hits[1], phu: hits.length >= 4 ? hits[2] : def.phu, toi: hits[hits.length - 1] };
+    return def;
+  }
+  mealWhy(sc, picks, P, sto, a) {
+    const cut = P.goalType === 'cut';
+    if (sc.kind === 'breakfast') {
+      let s = 'Bữa sáng đủ đạm từ ' + (picks.protein ? picks.protein.name.toLowerCase() : 'nguồn đạm') + ' giúp no lâu, ổn định năng lượng cả buổi.';
+      return s;
+    }
+    if (sc.kind === 'snack') {
+      let s = 'Bữa nhẹ giàu đạm từ ' + (picks.protein ? picks.protein.name.toLowerCase() : 'sữa chua/whey') + ' để giữ cơ và tránh đói cồn cào trước bữa tối.';
+      if (/mì gói|mi goi/.test((a.foods || '').toLowerCase())) s += ' Đây là lựa chọn thay cho thói quen ăn mì gói.';
+      return s;
+    }
+    let s = (picks.protein ? 'Đủ đạm từ ' + picks.protein.name.toLowerCase() : 'Cân đối đạm') + (picks.veg ? ' và nhiều ' + picks.veg.name.toLowerCase() + ' để no, dễ tiêu' : '') + '.';
+    if (sc.id === 'toi') {
+      if (cut) s += ' Bữa tối ít tinh bột tinh chế, phù hợp mục tiêu giảm mỡ.';
+      if (/thức khuya|thuc khuya|khuya|ngủ muộn/.test((a.sleep || '').toLowerCase())) s += ' Bạn hay thức khuya nên bữa tối nhẹ giúp ngủ ngon hơn.';
+    }
+    if (sto) s += ' Ưu tiên luộc/hấp do hệ tiêu hoá của bạn nhạy cảm.';
+    return s;
+  }
+  // lời khuyên cá nhân hoá: duy trì kế hoạch + cải thiện lối sống theo mục tiêu
+  buildTips(P, a) {
+    const tips = [];
+    const goal = (a.goal || '').toLowerCase();
+    const sleep = (a.sleep || '').toLowerCase();
+    const sto = (a.stomach || '').toLowerCase();
+    const job = (a.job || '').toLowerCase();
+    const food = (a.foods || '').toLowerCase();
+    const cut = P.goalType === 'cut';
+    const train = /tập|gym|tạ|chạy|bơi|đá bóng|workout|thể hình|cầu lông|yoga|đạp xe/.test((goal + ' ' + job));
+    // 1. nền tảng theo mục tiêu
+    if (cut) tips.push({ icon: 'target', title: 'Kiên trì với thâm hụt nhẹ', text: 'Mục tiêu của bạn cần ăn dưới mức tiêu hao một chút mỗi ngày. Đừng cắt quá gắt — giảm 0,3–0,5 kg/tuần là bền và giữ được cơ.' });
+    else if (P.goalType === 'bulk') tips.push({ icon: 'target', title: 'Tăng cân từ tốn', text: 'Ăn dư nhẹ và tập đều. Tăng 0,2–0,4 kg/tuần để lên cơ nhiều hơn mỡ.' });
+    else tips.push({ icon: 'target', title: 'Giữ ổn định', text: 'Ăn quanh mức duy trì và theo dõi cân nặng mỗi tuần để điều chỉnh nhẹ khi cần.' });
+    // 2. đạm đều các bữa
+    tips.push({ icon: 'protein', title: 'Rải đạm đều trong ngày', text: 'Cố gắng có nguồn đạm ở mỗi bữa (~' + Math.round(P.p / 4) + ' g/bữa). Đây là yếu tố quan trọng nhất để giữ cơ và no lâu khi ăn kiêng.' });
+    // 3. giấc ngủ
+    if (/thức khuya|thuc khuya|khuya|ngủ muộn|1:|2:|0:|3:/.test(sleep)) tips.push({ icon: 'sleep', title: 'Ngủ sớm hơn 30 phút', text: 'Bạn hay thức khuya — thiếu ngủ làm tăng cảm giác thèm ăn và khó giảm mỡ. Thử lùi giờ ngủ sớm dần 15–30 phút mỗi tuần, tránh màn hình trước khi ngủ.' });
+    else tips.push({ icon: 'sleep', title: 'Giữ giấc ngủ đều', text: 'Ngủ đủ 7–8 tiếng và đúng giờ giúp hồi phục, kiểm soát hormone đói và duy trì năng lượng tập luyện.' });
+    // 4. tiêu hoá
+    if (/đầy hơi|day hoi|khó tiêu|kho tieu|dạ dày|da day|ợ|trào ngược|trao nguoc|viêm/.test(sto)) tips.push({ icon: 'stomach', title: 'Nhẹ nhàng với dạ dày', text: 'Ăn chậm, nhai kỹ, chia nhỏ bữa và ưu tiên món luộc/hấp. Hạn chế đồ chiên, cay và ăn quá no sát giờ ngủ để bớt đầy hơi.' });
+    // 5. vận động theo công việc
+    if (/văn phòng|van phong|ngồi|ngoi|ít vận động|lái xe|tài xế|công sở/.test(job)) tips.push({ icon: 'move', title: 'Phá vỡ thời gian ngồi', text: 'Công việc ngồi nhiều — đứng dậy đi lại 2–3 phút mỗi giờ và cố đi đủ 7.000–8.000 bước/ngày để tăng tiêu hao mà không cần tập nặng.' });
+    // 6. tập luyện / hồi phục
+    if (train) tips.push({ icon: 'train', title: 'Ăn quanh buổi tập', text: 'Có bữa đủ đạm + tinh bột trước/sau khi tập để hồi phục tốt hơn. Uống đủ nước (' + this.dec1(P.water) + ' L/ngày) là điều dễ quên nhất.' });
+    // 7. nước
+    tips.push({ icon: 'water', title: 'Uống đủ nước mỗi ngày', text: 'Đặt mục tiêu ~' + this.dec1(P.water) + ' L. Để chai nước trong tầm mắt và uống 1 ly trước mỗi bữa — vừa đủ nước vừa giảm ăn quá đà.' });
+    // 8. thói quen cần đổi
+    if (/mì gói|mi goi|mì tôm/.test(food)) tips.push({ icon: 'swap', title: 'Giảm dần mì gói', text: 'Không cần bỏ hẳn ngay. Thay 1–2 bữa mì gói/tuần bằng bún/phở nấu rau + thịt, hoặc bữa nhẹ giàu đạm. Thay đổi nhỏ nhưng đều mới bền.' });
+    else if (/nước ngọt|trà sữa|tra sua|nước có ga/.test(food)) tips.push({ icon: 'swap', title: 'Cắt đồ uống có đường', text: 'Đồ uống ngọt là nguồn calo "ẩn" dễ cắt nhất. Chuyển dần sang nước lọc, trà không đường — bạn sẽ thấy khác biệt rõ sau vài tuần.' });
+    // 9. nguyên tắc duy trì
+    tips.push({ icon: 'repeat', title: 'Đặt mục tiêu lặp lại được', text: 'Phần khó nhất không phải ăn hoàn hảo một ngày, mà là làm đi làm lại. Chọn 3–4 món bạn thích và xoay vòng, đánh dấu mỗi ngày để giữ nhịp.' });
+    return tips;
+  }
+  tipIcon(name) {
+    const P = { width: 20, height: 20, viewBox: '0 0 24 24', fill: 'none', stroke: '#dd7a3b', strokeWidth: 1.8, strokeLinecap: 'round', strokeLinejoin: 'round' };
+    const paths = {
+      target: ['M12 2v3', 'M12 19v3', 'M2 12h3', 'M19 12h3', 'M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8z'],
+      protein: ['M6 14a6 6 0 0 1 12 0', 'M5 14h14', 'M8 14V9a4 4 0 0 1 8 0v5'],
+      sleep: ['M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z'],
+      stomach: ['M8 4v5a5 5 0 0 0 5 5 4 4 0 0 1 0 8H8', 'M8 9H6'],
+      move: ['M13 4a1 1 0 1 0 0 2 1 1 0 0 0 0-2z', 'M7 21l3-6 4 2 1 4', 'M6 12l4-1 3 3'],
+      train: ['M6.5 6.5l11 11', 'M4 9l2-2 2 2-2 2z', 'M16 17l2-2 2 2-2 2z', 'M2 11l2 2', 'M20 11l2 2'],
+      water: ['M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z'],
+      swap: ['M7 7h11l-3-3', 'M17 17H6l3 3'],
+      repeat: ['M17 2l3 3-3 3', 'M21 5H9a6 6 0 0 0-6 6', 'M7 22l-3-3 3-3', 'M3 19h12a6 6 0 0 0 6-6'],
+    };
+    return React.createElement('svg', P, (paths[name] || paths.target).map((d, i) => React.createElement('path', { key: i, d })));
+  }
+  state = {
+    screen: 'home',
+    step: 0,
+    dish: null,
+    clock: '9:41',
+    log: {},
+    swaps: {},
+    shareMsg: '',
+    remind: false,
+    remindNote: '',
+    answers: { name: '', goal: '', height: '', weight: '', age: '', job: '', sleep: '', stomach: '', foods: '', meals: '', supps: '' },
+  };
+  GLASS = 250; // ml mỗi ly
+  addWater(delta) {
+    return (e) => {
+      if (e && e.stopPropagation) e.stopPropagation();
+      const key = this.todayKey();
+      this.setState((st) => {
+        const day = { ...(st.log[key] || {}) };
+        const cur = day.__water || 0;
+        day.__water = Math.max(0, Math.min(20, cur + delta));
+        return { log: { ...st.log, [key]: day } };
+      }, () => this.save());
+    };
+  }
+  toggleRemind = async () => {
+    if (this.state.remind) { this.stopRemind(); this.setState({ remind: false }, () => this.save()); return; }
+    let ok = true;
+    try {
+      if (typeof Notification !== 'undefined') {
+        const perm = Notification.permission === 'granted' ? 'granted' : await Notification.requestPermission();
+        ok = perm === 'granted';
+      }
+    } catch (e) { ok = false; }
+    this.setState({ remind: true, remindNote: ok ? '' : 'Trình duyệt chưa cho phép thông báo — bạn vẫn xem được nhắc nhở khi mở app.' }, () => { this.save(); this.startRemind(); });
+  };
+  startRemind() {
+    this.stopRemind();
+    this._remindTimer = setInterval(() => {
+      try {
+        if (typeof Notification !== 'undefined' && Notification.permission === 'granted') {
+          new Notification('💧 Đến giờ uống nước rồi!', { body: 'Uống một ly nước để giữ đủ nước cho hôm nay nhé.' });
+        }
+      } catch (e) {}
+    }, 90 * 60 * 1000); // mỗi 90 phút khi app đang mở
+  }
+  stopRemind() { if (this._remindTimer) { clearInterval(this._remindTimer); this._remindTimer = null; } }
+  shareProgress(report) {
+    return async () => {
+      try {
+        if (navigator.share) { await navigator.share({ title: 'Tiến độ dinh dưỡng', text: report }); return; }
+      } catch (e) { if (e && e.name === 'AbortError') return; }
+      try {
+        await navigator.clipboard.writeText(report);
+        this.setState({ shareMsg: 'Đã sao chép báo cáo — dán vào Zalo/tin nhắn để gửi coach.' });
+      } catch (e) {
+        this.setState({ shareMsg: report });
+      }
+      setTimeout(() => { if (this.state.shareMsg) this.setState({ shareMsg: '' }); }, 8000);
+    };
+  }
+  cycleSwap(id) {
+    return (e) => {
+      if (e && e.stopPropagation) e.stopPropagation();
+      this.setState((st) => ({ swaps: { ...st.swaps, [id]: (st.swaps[id] || 0) + 1 } }), () => this.save());
+    };
+  }
+  resetScroll() { if (this.scrollEl) this.scrollEl.scrollTop = 0; }
+  go(s) {
+    return () => { this.setState({ screen: s }); this.resetScroll(); };
+  }
+  startIntake = () => { this.setState({ screen: 'intake', step: 0 }); this.resetScroll(); };
+  next = () => {
+    const s = this.state.step;
+    if (s >= this.TOTAL - 1) this.setState({ screen: 'menu' });
+    else this.setState({ step: s + 1 });
+    this.resetScroll();
+  };
+  prev = () => {
+    const s = this.state.step;
+    if (s <= 0) this.setState({ screen: 'home' });
+    else this.setState({ step: s - 1 });
+    this.resetScroll();
+  };
+  set(k) {
+    return (e) => {
+      const v = e.target.value;
+      this.setState((st) => ({ answers: { ...st.answers, [k]: v } }), () => this.save());
+    };
+  }
+  openDish(id) { return () => { this.setState({ screen: 'dish', dish: id }); this.resetScroll(); }; }
+  toggleEaten(id) {
+    return (e) => {
+      if (e && e.stopPropagation) e.stopPropagation();
+      const key = this.todayKey();
+      this.setState((st) => {
+        const day = { ...(st.log[key] || {}) };
+        day[id] = !day[id];
+        return { log: { ...st.log, [key]: day } };
+      }, () => this.save());
+    };
+  }
+  save() {
+    try { localStorage.setItem(this.STORE, JSON.stringify({ answers: this.state.answers, log: this.state.log, swaps: this.state.swaps, remind: this.state.remind })); } catch (e) {}
+  }
+  tickClock = () => {
+    const d = new Date();
+    const hh = String(d.getHours()).padStart(2, '0');
+    const mm = String(d.getMinutes()).padStart(2, '0');
+    const clock = hh + ':' + mm;
+    if (clock !== this.state.clock) this.setState({ clock });
+  };
+  componentWillUnmount() { if (this._clockTimer) clearInterval(this._clockTimer); this.stopRemind(); }
+  componentDidMount() {
+    this.tickClock();
+    this._clockTimer = setInterval(this.tickClock, 10000);
+    try {
+      const raw = localStorage.getItem(this.STORE);
+      if (raw) {
+        const d = JSON.parse(raw);
+        const next = {};
+        if (d && d.answers) next.answers = { ...this.state.answers, ...d.answers };
+        if (d && d.log) next.log = d.log;
+        else if (d && d.eaten) next.log = { [this.todayKey()]: d.eaten };
+        if (d && d.swaps) next.swaps = d.swaps;
+        if (d && d.remind) next.remind = true;
+        if (Object.keys(next).length) this.setState(next, () => { if (this.state.remind) this.startRemind(); });
+      }
+    } catch (e) {}
+  }
+  renderVals() {
+    const s = this.state.screen;
+    const step = this.state.step;
+    const a = this.state.answers;
+    const active = '#dd7a3b';
+    const muted = '#6b6560';
+    const fmt = (n) => this.fmt(n);
+    const CIRC = 327;
+    const P = this.plan();
+    const has = P.has;
+    const gl = P.goalType === 'cut' ? 'giảm mỡ · giữ cơ' : P.goalType === 'bulk' ? 'tăng cơ' : 'duy trì vóc dáng';
+    const glTitle = P.goalType === 'cut' ? 'Giảm mỡ · giữ cơ' : P.goalType === 'bulk' ? 'Tăng cơ' : 'Duy trì vóc dáng';
+    const def = P.goalType === 'cut' ? 'thâm hụt nhẹ ~20%' : P.goalType === 'bulk' ? 'dư nhẹ ~8%' : 'quanh mức duy trì';
+    const ppk = P.goalType === 'cut' ? '2,0' : '1,6';
+    const sleepL = (a.sleep || '').toLowerCase(), stoL = (a.stomach || '').toLowerCase(), foodL = (a.foods || '').toLowerCase();
+    const train = /tập|gym|tạ|chạy|bơi|đá bóng|workout|thể hình|the hinh|cầu lông/.test((a.goal + ' ' + a.job).toLowerCase());
+    const menu = this.buildMenu(P);
+    const mealsCalc = menu.meals;
+    const bads = menu.bads;
+    const log = this.state.log || {};
+    const eaten = log[this.todayKey()] || {};
+    const dow = ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'];
+    const weekDays = [];
+    let daysLogged = 0;
+    for (let i = 6; i >= 0; i--) {
+      const dt = new Date(); dt.setHours(0, 0, 0, 0); dt.setDate(dt.getDate() - i);
+      const dayEaten = log[this.ymd(dt)] || {};
+      const k = mealsCalc.reduce((acc, m) => dayEaten[m.id] ? acc + m.kcal : acc, 0);
+      if (k > 0) daysLogged++;
+      const isToday = i === 0;
+      const frac = P.kcal > 0 ? Math.min(k / P.kcal, 1) : 0;
+      weekDays.push({
+        label: isToday ? 'Hôm nay' : dow[dt.getDay()],
+        barH: (k > 0 ? Math.round(8 + frac * 64) : 6) + 'px',
+        barBg: isToday ? '#dd7a3b' : (k > 0 ? '#cf9d6f' : '#efe6d4'),
+        labelColor: isToday ? '#dd7a3b' : '#6b6560',
+        labelWeight: isToday ? '700' : '400',
+      });
+    }
+    const sum = mealsCalc.reduce((acc, m) => eaten[m.id]
+      ? { kcal: acc.kcal + m.kcal, p: acc.p + m.p, c: acc.c + m.c, f: acc.f + m.f } : acc,
+      { kcal: 0, p: 0, c: 0, f: 0 });
+    const remain = P.kcal - sum.kcal;
+    const mealsView = mealsCalc.map((m) => {
+      const on = !!eaten[m.id];
+      return {
+        name: m.name, dishName: m.dish, timeKcal: m.time + ' · ' + fmt(m.kcal) + ' kcal',
+        img: this.dishImg(m),
+        pLabel: 'Đạm ' + m.p + 'g', cLabel: 'Tinh bột ' + m.c + 'g', fLabel: 'Béo ' + m.f + 'g',
+        hasBadge: !!m.badge, badge: m.badge || '',
+        onTap: this.openDish(m.id), onToggle: this.toggleEaten(m.id),
+        canSwap: (m.altCount || 0) > 1, onSwap: this.cycleSwap(m.id),
+        checkBg: on ? '#bd6329' : '#ffffff', checkBorder: on ? '#bd6329' : '#c9b89a',
+        checkMark: on ? '✓' : '', checkColor: on ? '#bd6329' : '#6b6560',
+        checkLabel: on ? 'Đã ăn' : 'Đánh dấu đã ăn',
+      };
+    });
+    const sel = mealsCalc.find((m) => m.id === this.state.dish) || mealsCalc[0];
+    const selOn = !!eaten[sel.id];
+    const tips = has ? this.buildTips(P, a).map((t) => ({ title: t.title, text: t.text, iconEl: this.tipIcon(t.icon) })) : [];
+    let menuWhy = 'Mục tiêu ' + gl + ' → đặt ' + def + ', ưu tiên đạm ' + ppk + ' g/kg cân nặng.';
+    if (/thức khuya|thuc khuya|ngủ muộn|ngu muon|khuya|1:|2:|0:/.test(sleepL)) menuWhy += ' Bạn hay thức khuya nên bữa tối nhẹ, hạn chế caffeine buổi chiều.';
+    if (/đầy hơi|day hoi|khó tiêu|kho tieu|dạ dày|da day|ợ|trào ngược|trao nguoc/.test(stoL)) menuWhy += ' Hệ tiêu hoá nhạy cảm nên ưu tiên món luộc/hấp thay vì chiên dầu.';
+    let recsWhy = 'Tính theo cân nặng ' + (P.w ? P.w + ' kg' : 'của bạn') + ' và mục tiêu ' + gl + '.';
+    if (train) recsWhy += ' Bạn có tập luyện nên ưu tiên đủ đạm và nước để hồi phục.';
+    const subText = bads.length
+      ? bads.map((b) => b.label + ' → ' + b.swap).join('. ') + '.'
+      : 'Khẩu phần của bạn khá cân đối — hãy duy trì ưu tiên món luộc/hấp, đủ rau và uống đủ nước mỗi ngày.';
+    const protFoods = this.pool(this.detectFoods().found, 'protein').concat(this.pool(this.detectFoods().found, 'dairy'));
+    const protNames = protFoods.length ? protFoods.slice(0, 4).map((f) => f.name.toLowerCase()).join(', ') : 'ức gà, trứng, cá, đậu';
+    const perMealP = P.p ? Math.round(P.p / 4) : 0;
+    const _now = new Date();
+    const _wd = ['Chủ Nhật', 'Thứ Hai', 'Thứ Ba', 'Thứ Tư', 'Thứ Năm', 'Thứ Sáu', 'Thứ Bảy'][_now.getDay()];
+    const todayLabel = _wd + ' · ' + _now.getDate() + '/' + (_now.getMonth() + 1);
+    return {
+      clock: this.state.clock,
+      todayLabel: todayLabel,
+      isHome: s === 'home',
+      isIntake: s === 'intake',
+      isMenu: s === 'menu' && has,
+      isRecs: s === 'recs' && has,
+      isWeek: s === 'week' && has,
+      isProfile: s === 'profile' && has,
+      isDish: s === 'dish',
+      showLocked: !has && (s === 'menu' || s === 'recs' || s === 'week' || s === 'profile'),
+      showTabs: s !== 'intake' && s !== 'dish',
+      bottomInset: (s === 'intake' || s === 'dish') ? '0px' : '80px',
+      hasProfile: has,
+      homeKcal: has ? fmt(P.kcal) : '—',
+      homePLabel: has ? (P.p + ' g') : '—', homeCLabel: has ? (P.c + ' g') : '—', homeFLabel: has ? (P.f + ' g') : '—',
+      homePW: has ? Math.round(P.p * 4 / P.kcal * 100) + '%' : '0%',
+      homeCW: has ? Math.round(P.c * 4 / P.kcal * 100) + '%' : '0%',
+      homeFW: has ? Math.round(P.f * 9 / P.kcal * 100) + '%' : '0%',
+      homeRingDash: has ? CIRC + ' ' + CIRC : '0 ' + CIRC,
+      homeCtaLabel: has ? 'Xem thực đơn của tôi →' : 'Bắt đầu — ' + this.TOTAL + ' câu hỏi →',
+      homeCtaAction: has ? this.go('menu') : this.startIntake,
+      homeSub: has ? 'Kế hoạch đã sẵn sàng · chạm để xem & theo dõi' : 'Tự luận · khoảng 3 phút · chỉnh sửa bất cứ lúc nào',
+      meals: mealsView,
+      ringDash: P.kcal > 0 ? (Math.min(sum.kcal / P.kcal, 1) * CIRC).toFixed(0) + ' ' + CIRC : '0 ' + CIRC,
+      consumedLabel: fmt(sum.kcal),
+      targetKcalLabel: '/ ' + fmt(P.kcal) + ' kcal',
+      remainLabel: remain > 0 ? 'còn ' + fmt(remain) + ' kcal' : 'đã đạt mục tiêu',
+      pPair: sum.p + '/' + P.p + 'g',
+      cPair: sum.c + '/' + P.c + 'g',
+      fPair: sum.f + '/' + P.f + 'g',
+      menuWhy: menuWhy,
+      waterTargetGlasses: (function () { const g = Math.round(P.water * 1000 / 250); return g > 0 ? g : 8; })(),
+      waterGlasses: eaten.__water || 0,
+      waterLabel: ((eaten.__water || 0) * 0.25).toFixed(2).replace(/\.?0+$/, '').replace('.', ',') + ' / ' + this.dec1(P.water) + ' L',
+      waterPct: (function () { const t = Math.round(P.water * 1000 / 250) || 8; return Math.min(100, Math.round((eaten.__water || 0) / t * 100)) + '%'; })(),
+      waterCups: (function () { const t = Math.round(P.water * 1000 / 250) || 8; const cur = eaten.__water || 0; const arr = []; for (let i = 0; i < t; i++) arr.push({ fill: i < cur ? '#3d92ac' : '#ffffff' }); return arr; })(),
+      waterDone: (eaten.__water || 0) >= (Math.round(P.water * 1000 / 250) || 8),
+      addWater: this.addWater(1),
+      removeWater: this.addWater(-1),
+      remindOn: this.state.remind,
+      remindLabel: this.state.remind ? '🔔 Đang bật nhắc uống nước' : 'Bật nhắc uống nước',
+      remindBg: this.state.remind ? '#bd6329' : '#ffffff',
+      remindColor: this.state.remind ? '#faf8f4' : '#bd6329',
+      toggleRemind: this.toggleRemind,
+      hasRemindNote: !!this.state.remindNote,
+      remindNote: this.state.remindNote,
+      selName: sel.name, selDish: sel.dish, selTimeKcal: sel.time + ' · ' + fmt(sel.kcal) + ' kcal',
+      selImg: this.dishImg(sel),
+      selP: sel.p + 'g', selC: sel.c + 'g', selF: sel.f + 'g',
+      selIngredients: sel.ingredients,
+      selSteps: sel.steps.map((t, i) => ({ num: String(i + 1), text: t })),
+      selWhy: sel.why,
+      selCanSwap: (sel.altCount || 0) > 1,
+      selSwap: this.cycleSwap(sel.id),
+      selSwapLabel: 'Đổi món khác (' + (sel.altCount || 1) + ' lựa chọn) ↻',
+      selToggle: this.toggleEaten(sel.id),
+      selBtnLabel: selOn ? '✓ Đã ăn — bỏ đánh dấu' : 'Đánh dấu đã ăn',
+      selBtnBg: selOn ? '#bd6329' : '#dd7a3b',
+      tips: tips,
+      recProtein: '≥ ' + P.p + ' g', recProteinBar: P.p ? Math.min(100, Math.round(sum.p / P.p * 100)) + '%' : '0%',
+      recProteinDone: 'đã nạp ' + sum.p + ' g hôm nay', recProteinNote: 'Chia đều ~' + perMealP + ' g mỗi bữa từ ' + protNames + '.',
+      recVeg: '≥ 400 g', recWater: '≥ ' + this.dec1(P.water) + ' L', recFat: '≥ ' + P.f + ' g',
+      recFatBar: P.f ? Math.min(100, Math.round(sum.f / P.f * 100)) + '%' : '0%', recFatDone: 'đã nạp ' + sum.f + ' g hôm nay',
+      recFiber: '≥ ' + P.fiber + ' g', recsWhy: recsWhy, subText: subText,
+      glTitle: glTitle, profName: (a.name || '').trim() || 'Hồ sơ của bạn', profKcal: fmt(P.kcal), profDeficit: 'Đặt ' + def + ' để ' + gl + '.',
+      profP: 'Đạm ' + P.p + 'g', profC: 'TB ' + P.c + 'g', profF: 'Béo ' + P.f + 'g',
+      dHeight: a.height || '—', dWeight: a.weight || '—', dAge: a.age || '—', bmiLabel: P.bmi ? this.dec1(P.bmi) : '—',
+      dSleep: a.sleep || '(chưa điền)', dStomach: a.stomach || '(chưa điền)', dMeals: a.meals || '(chưa điền)', dSupps: a.supps || '(chưa điền)',
+      weekRingDash: P.kcal > 0 ? (Math.min(sum.kcal / P.kcal, 1) * CIRC).toFixed(0) + ' ' + CIRC : '0 ' + CIRC,
+      weekConsumed: fmt(sum.kcal), weekTargetLabel: '/ ' + fmt(P.kcal) + ' kcal',
+      weekMacroLine: 'Đạm ' + sum.p + '/' + P.p + 'g · TB ' + sum.c + '/' + P.c + 'g · Béo ' + sum.f + '/' + P.f + 'g',
+      weekDays: weekDays,
+      daysLoggedLabel: daysLogged > 0 ? ('Đã ghi ' + daysLogged + '/7 ngày gần đây') : 'Chưa có ngày nào được ghi',
+      shareProgress: this.shareProgress((function () {
+        const td = new Date();
+        const dstr = String(td.getDate()).padStart(2, '0') + '/' + String(td.getMonth() + 1).padStart(2, '0') + '/' + td.getFullYear();
+        const eatenNames = mealsCalc.filter((m) => eaten[m.id]).map((m) => m.name);
+        const lines = [];
+        lines.push('📋 NHẬT KÝ DINH DƯỠNG — David Coaching');
+        if ((a.name || '').trim()) lines.push('👤 Khách: ' + a.name.trim());
+        lines.push('Ngày ' + dstr);
+        lines.push('🎯 Mục tiêu: ' + glTitle);
+        lines.push('🔥 Calo: ' + fmt(sum.kcal) + ' / ' + fmt(P.kcal) + ' kcal');
+        lines.push('💪 Đạm ' + sum.p + '/' + P.p + 'g · Tinh bột ' + sum.c + '/' + P.c + 'g · Béo ' + sum.f + '/' + P.f + 'g');
+        lines.push('🍽 Bữa đã ăn: ' + (eatenNames.length ? eatenNames.join(', ') : 'chưa đánh dấu bữa nào'));
+        lines.push('📅 ' + (daysLogged > 0 ? 'Tuần này đã ghi ' + daysLogged + '/7 ngày' : 'Mới bắt đầu theo dõi'));
+        return lines.join('\n');
+      })()),
+      shareMsg: this.state.shareMsg,
+      hasShareMsg: !!this.state.shareMsg,
+      homeColor: s === 'home' ? active : muted,
+      weekColor: s === 'week' ? active : muted,
+      menuColor: s === 'menu' ? active : muted,
+      recsColor: s === 'recs' ? active : muted,
+      profileColor: s === 'profile' ? active : muted,
+      goHome: this.go('home'),
+      goMenu: this.go('menu'),
+      goRecs: this.go('recs'),
+      goWeek: this.go('week'),
+      goProfile: this.go('profile'),
+      goIntake: this.startIntake,
+      next: this.next,
+      prev: this.prev,
+      progressPct: Math.round(((step + 1) / this.TOTAL) * 100) + '%',
+      stepCounter: 'Câu ' + (step + 1) + ' / ' + this.TOTAL,
+      continueLabel: step === this.TOTAL - 1 ? 'Tạo thực đơn cho tôi →' : 'Tiếp tục →',
+      st0: step === 0, st1: step === 1, st2: step === 2, st3: step === 3, st4: step === 4,
+      st5: step === 5, st6: step === 6, st7: step === 7,
+      vName: a.name, onName: this.set('name'),
+      vGoal: a.goal, vHeight: a.height, vWeight: a.weight, vAge: a.age, vJob: a.job,
+      vSleep: a.sleep, vStomach: a.stomach, vFoods: a.foods, vMeals: a.meals, vSupps: a.supps,
+      onGoal: this.set('goal'), onHeight: this.set('height'), onWeight: this.set('weight'),
+      onAge: this.set('age'), onJob: this.set('job'), onSleep: this.set('sleep'),
+      onStomach: this.set('stomach'), onFoods: this.set('foods'), onMeals: this.set('meals'),
+      onSupps: this.set('supps'),
+      scrollRef: (el) => { this.scrollEl = el; },
+    };
+  }
+}
+</script>
+</body>
+</html>
