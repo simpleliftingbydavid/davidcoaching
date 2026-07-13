@@ -4,12 +4,36 @@
 
 document.addEventListener('DOMContentLoaded', () => {
   initNav();
+  initNavDropdowns();
   initAccordion();
   initFaqFilter();
   initTdeeCalculator();
   initMacroCalculator();
   initRevealOnScroll();
 });
+
+/* ---------- Nav dropdowns ("Công cụ", "Khác") ---------- */
+function initNavDropdowns() {
+  const dropdowns = document.querySelectorAll('.nav-dropdown');
+  if (!dropdowns.length) return;
+
+  dropdowns.forEach(dd => {
+    const trigger = dd.querySelector('.nav-dropdown-trigger');
+    if (!trigger) return;
+    trigger.addEventListener('click', (e) => {
+      e.preventDefault();
+      const isOpen = dd.classList.contains('open');
+      dropdowns.forEach(other => other.classList.remove('open'));
+      dd.classList.toggle('open', !isOpen);
+    });
+  });
+
+  document.addEventListener('click', (e) => {
+    dropdowns.forEach(dd => {
+      if (!dd.contains(e.target)) dd.classList.remove('open');
+    });
+  });
+}
 
 /* ---------- Reveal-on-scroll ---------- */
 function initRevealOnScroll() {

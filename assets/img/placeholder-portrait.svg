@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 400">
+  <rect x="2" y="2" width="296" height="396" rx="18" fill="#faf8f4" stroke="#d9cfba" stroke-width="2.5" stroke-dasharray="9 7"/>
+  <circle cx="150" cy="158" r="46" fill="none" stroke="#b6ab93" stroke-width="3.5"/>
+  <path d="M84 292 Q150 224 216 292 L216 336 Q150 360 84 336 Z" fill="none" stroke="#b6ab93" stroke-width="3.5"/>
+  <text x="150" y="382" font-family="Arial, sans-serif" font-size="13" fill="#a89c86" text-anchor="middle" letter-spacing="1">Ảnh sẽ cập nhật</text>
+</svg>

@@ -166,7 +166,7 @@ p { margin: 0 0 1em; color: var(--text-700); }
 .nav-links li { flex-shrink: 0; }
 .nav-links a {
   display: inline-block;
-  padding: 9px 9px;
+  padding: 9px 7px;
   border-radius: 999px;
   font-size: .82rem;
   font-weight: 600;
@@ -180,6 +180,44 @@ p { margin: 0 0 1em; color: var(--text-700); }
 }
 .nav-links a:hover { background: var(--surface-alt); color: var(--navy-900); }
 .nav-links a.active { background: var(--navy-900); color: #fff; }
+
+/* ---------- Nav dropdown ("Công cụ", "Khác") ---------- */
+.nav-dropdown { position: relative; }
+.nav-dropdown-trigger { display: inline-flex; align-items: center; gap: 3px; }
+.nav-dropdown-trigger .caret { font-size: .65em; transition: transform .18s ease; display: inline-block; }
+.nav-dropdown.open .nav-dropdown-trigger .caret,
+.nav-dropdown:hover .nav-dropdown-trigger .caret { transform: rotate(180deg); }
+.nav-dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  padding-top: 10px;
+  z-index: 200;
+}
+.nav-dropdown.open .nav-dropdown-menu,
+.nav-dropdown:hover .nav-dropdown-menu { display: block; }
+.nav-dropdown-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: var(--shadow-md);
+  padding: 6px;
+  min-width: 216px;
+  display: flex;
+  flex-direction: column;
+}
+.nav-dropdown-card a {
+  display: block;
+  padding: 10px 13px;
+  border-radius: 8px;
+  font-size: .85rem;
+  font-weight: 600;
+  color: var(--text-700);
+  white-space: nowrap;
+}
+.nav-dropdown-card a:hover { background: var(--surface-alt); color: var(--navy-900); }
+.nav-dropdown-card a.active { background: var(--navy-900); color: #fff; }
 
 .nav-toggle {
   display: none;
@@ -567,6 +605,12 @@ td strong { color: var(--text-900); }
   .nav-links.open { display: flex; }
   .nav-links a { padding: 12px 16px; white-space: normal; }
   .nav-toggle { display: flex; }
+
+  .nav-dropdown-trigger { pointer-events: none; opacity: .55; font-size: .78rem; text-transform: uppercase; letter-spacing: .05em; padding-bottom: 2px !important; }
+  .nav-dropdown-trigger .caret { display: none; }
+  .nav-dropdown-menu { display: block !important; position: static; padding-top: 0; }
+  .nav-dropdown-card { box-shadow: none; border: none; padding: 0 0 4px 14px; border-left: 2px solid var(--border); margin: 0 0 6px; min-width: 0; }
+  .nav-dropdown-card a { padding: 10px 12px; }
 }
 
 @media (max-width: 880px) {
@@ -584,3 +628,60 @@ td strong { color: var(--text-900); }
   section { padding: 52px 0; }
   .cta-band { padding: 32px 22px; }
 }
+
+/* ---------- Testimonial (Before/After) cards ---------- */
+.testimonial-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 26px; }
+.testimonial-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+.testimonial-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+.testimonial-photos { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; background: var(--border); }
+.testimonial-photo { position: relative; aspect-ratio: 3 / 4; overflow: hidden; background: var(--bg); }
+.testimonial-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.photo-tag {
+  position: absolute; top: 10px; left: 10px;
+  background: var(--navy-900); color: #fff;
+  font-size: .66rem; font-weight: 800; letter-spacing: .07em;
+  padding: 4px 10px; border-radius: 999px;
+}
+.photo-tag.after { background: var(--accent); }
+.testimonial-note { padding: 18px 20px; }
+.testimonial-name { font-family: var(--font-display); font-weight: 700; font-size: 1.05rem; color: var(--navy-900); }
+.testimonial-meta { display: flex; flex-direction: column; gap: 7px; margin-top: 12px; }
+.testimonial-meta span { display: flex; align-items: center; gap: 8px; font-size: .86rem; color: var(--text-700); }
+.testimonial-meta .tm-icon {
+  width: 22px; height: 22px; border-radius: 7px; flex-shrink: 0;
+  background: var(--accent-light); color: var(--accent-dark);
+  display: inline-flex; align-items: center; justify-content: center; font-size: .78rem;
+}
+
+/* ---------- Document library cards ---------- */
+.doc-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 22px; }
+.doc-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+.doc-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+.doc-icon {
+  width: 52px; height: 52px; border-radius: 14px;
+  background: var(--accent-light); color: var(--accent-dark);
+  display: flex; align-items: center; justify-content: center; font-size: 1.5rem;
+}
+.doc-card h3 { margin-bottom: 0; }
+.doc-summary { color: var(--text-700); font-size: .92rem; min-height: 42px; margin: 0; }
+.doc-summary.placeholder { color: var(--text-500); font-style: italic; }
+.doc-meta { display: flex; gap: 10px; flex-wrap: wrap; font-size: .76rem; color: var(--text-500); font-weight: 700; text-transform: uppercase; letter-spacing: .03em; }
+.doc-meta .tag-soon { background: var(--surface-alt); padding: 3px 9px; border-radius: 999px; }
+.doc-download { justify-content: center; margin-top: auto; }
+.doc-download[aria-disabled="true"] { opacity: .5; pointer-events: none; }
