@@ -406,7 +406,8 @@ section { padding: 72px 0; }
 }
 .pillar-card ul { margin: 14px 0 20px; padding-left: 20px; color: var(--text-700); }
 .pillar-card ul li { margin-bottom: 6px; }
-.pillar-card .link-arrow { margin-top: auto; font-weight: 700; color: var(--accent-dark); display: inline-flex; align-items: center; gap: 6px; }
+.link-arrow { font-weight: 700; color: var(--accent-dark); display: inline-flex; align-items: center; gap: 6px; }
+.pillar-card .link-arrow { margin-top: auto; }
 
 /* ---------- Callout boxes ---------- */
 .box { border-radius: var(--radius-sm); padding: 20px 22px; margin: 22px 0; border: 1.5px solid; }
@@ -685,3 +686,28 @@ td strong { color: var(--text-900); }
 .doc-meta .tag-soon { background: var(--surface-alt); padding: 3px 9px; border-radius: 999px; }
 .doc-download { justify-content: center; margin-top: auto; }
 .doc-download[aria-disabled="true"] { opacity: .5; pointer-events: none; }
+
+/* ---------- About / portrait ---------- */
+.portrait-frame {
+  max-width: 320px;
+  aspect-ratio: 3 / 4;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--bg);
+  box-shadow: var(--shadow-sm);
+}
+.portrait-frame img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.portrait-caption { margin-top: 14px; max-width: 320px; }
+.portrait-caption .p-name { font-family: var(--font-display); font-weight: 700; font-size: 1.15rem; color: var(--navy-900); }
+.portrait-caption .p-title { font-size: .85rem; color: var(--text-500); margin-top: 2px; }
+.about-story p { font-size: 1.02rem; line-height: 1.75; }
+.about-pullquote {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 600;
+  font-size: 1.25rem;
+  color: var(--navy-900);
+  border-left: 3px solid var(--accent);
+  padding-left: 20px;
+  margin: 28px 0 0;
+}
