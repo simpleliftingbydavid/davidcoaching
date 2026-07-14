@@ -687,6 +687,63 @@ td strong { color: var(--text-900); }
 .doc-download { justify-content: center; margin-top: auto; }
 .doc-download[aria-disabled="true"] { opacity: .5; pointer-events: none; }
 
+/* ---------- Tier stepper (Dinh dưỡng journey) ---------- */
+.tier-stepper {
+  display: flex; align-items: center; gap: 20px; flex-wrap: wrap;
+  padding: 22px 0 6px;
+}
+.tier-stepper-back {
+  font-weight: 700; font-size: .86rem; color: var(--text-500);
+  display: inline-flex; align-items: center; gap: 6px; flex-shrink: 0;
+}
+.tier-stepper-back:hover { color: var(--navy-900); }
+.tier-step-list { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
+.tier-step {
+  width: 34px; height: 34px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 800; font-size: .84rem;
+  background: var(--surface); color: var(--text-500);
+  border: 1.5px solid var(--border);
+  transition: border-color .15s, color .15s, background .15s;
+}
+.tier-step:hover { border-color: var(--accent); color: var(--accent-dark); }
+.tier-step.current { background: var(--navy-900); border-color: var(--navy-900); color: #fff; }
+
+/* ---------- Tier next (bottom of tier sub-pages) ---------- */
+.tier-next {
+  display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 18px;
+  background: var(--surface); border: 1.5px dashed var(--accent);
+  border-radius: var(--radius); padding: 26px 30px;
+}
+.tier-next .tier-next-label { font-size: .76rem; font-weight: 800; text-transform: uppercase; letter-spacing: .07em; color: var(--accent-dark); margin-bottom: 4px; display: block; }
+.tier-next h3 { margin: 0; }
+.tier-next.done { border-style: solid; border-color: var(--core-border); background: var(--core-bg); }
+
+/* ---------- Journey list (hub page) ---------- */
+.journey-list { display: flex; flex-direction: column; gap: 14px; }
+.journey-card {
+  display: flex; align-items: center; gap: 22px;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 24px 28px;
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+}
+.journey-card:hover { transform: translateX(4px); box-shadow: var(--shadow-md); border-color: #e0c9ab; }
+.journey-num {
+  flex-shrink: 0; width: 46px; height: 46px; border-radius: 50%;
+  background: var(--navy-900); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-display); font-weight: 700; font-size: 1.25rem;
+}
+.journey-body { flex: 1; }
+.journey-body h3 { margin-bottom: 4px; }
+.journey-body p { margin: 0; font-size: .92rem; }
+.journey-arrow { flex-shrink: 0; font-size: 1.4rem; color: var(--accent-dark); font-weight: 700; }
+@media (max-width: 720px) {
+  .journey-card { flex-wrap: wrap; }
+  .journey-arrow { display: none; }
+  .tier-next { flex-direction: column; align-items: flex-start; }
+}
+
 /* ---------- About / portrait ---------- */
 .portrait-frame {
   max-width: 320px;
